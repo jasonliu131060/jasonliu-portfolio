@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <meta
+      name="description"
+      content="Jason Liu is a UCLA electrical engineering student building power electronics, embedded systems, controls, and mixed-signal hardware."
+    />
+    <meta name="theme-color" content="#f5f5f7" />
+    <title>Jason Liu | Electrical Engineering</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231d1d1f'/%3E%3Cpath d='M18 16v23c0 7 4 10 11 10 6 0 10-3 10-9V16' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M47 16v33' stroke='%232996ff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" data-header>
+      <nav class="nav shell" aria-label="Primary navigation">
+        <a class="wordmark" href="#top" aria-label="Jason Liu, home">Jason Liu</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span>
+          <span class="sr-only">Open navigation</span>
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a href="#work">Work</a>
+          <a href="#about">About</a>
+          <a href="mailto:jasonliu131060@outlook.com">Contact</a>
+          <a class="nav-resume" href="assets/Jason_Liu_Resume_2026.pdf" target="_blank" rel="noreferrer">Resume</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero shell" id="top">
+        <p class="eyebrow reveal">Electrical Engineering · UCLA</p>
+        <h1 class="reveal">Hardware that connects<br />power, sensing, and intelligence.</h1>
+        <p class="hero-copy reveal">
+          I’m Jason Liu. I design power electronics, embedded systems, mixed-signal circuits, and controls—then use simulation and hardware evidence to make them better.
+        </p>
+        <div class="hero-actions reveal">
+          <a class="button button-primary" href="#work">Explore my work <span aria-hidden="true">↓</span></a>
+          <a class="text-link" href="assets/Jason_Liu_Resume_2026.pdf" target="_blank" rel="noreferrer">View resume <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="hero-rail reveal" aria-label="Core interests">
+          <span>Power electronics</span>
+          <span>Embedded systems</span>
+          <span>Analog circuits</span>
+          <span>Controls</span>
+          <span>PCB design</span>
+        </div>
+      </section>
+
+      <section class="work-intro shell" id="work">
+        <p class="eyebrow reveal">Selected work</p>
+        <h2 class="section-title reveal">Designed from the system level down.</h2>
+        <p class="section-lede reveal">
+          Four projects spanning isolated power conversion, edge AI, robotics, and vehicle electronics. Each status is stated plainly: built, simulated, or awaiting fabrication.
+        </p>
+      </section>
+
+      <article class="project project-converter">
+        <div class="shell project-grid">
+          <div class="project-copy reveal">
+            <div class="project-meta">
+              <span class="project-number">01</span>
+              <span class="status status-simulated">Designed &amp; simulated</span>
+            </div>
+            <p class="eyebrow">Bruin Racing · Supermileage</p>
+            <h2>48 V to 12 V isolated power conversion.</h2>
+            <p class="project-summary">
+              A 120 W active-clamp forward converter for a hydrogen fuel-cell vehicle, combining custom magnetics, synchronous rectification, sensing, protection, and digital control. Battery charging remains part of the intended system; the interface is still under validation.
+            </p>
+            <dl class="metrics">
+              <div><dt>120 W</dt><dd>target output</dd></div>
+              <div><dt>200 kHz</dt><dd>switching frequency</dd></div>
+              <div><dt>&lt; 0.8%</dt><dd>simulated ripple window</dd></div>
+            </dl>
+            <div class="decision-note">
+              <span>Engineering decision</span>
+              <p>Correcting the transformer model from 18 µH to 180 µH changed the switching conclusion and removed an unsupported ZVS claim.</p>
+            </div>
+          </div>
+          <figure class="media-card media-dark reveal">
+            <img src="assets/converter-ltspice.png" alt="LTspice active-clamp converter schematic beside simulated startup waveforms" width="3024" height="1964" />
+            <figcaption>LTspice design and verification · simulation only</figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="project project-wearable">
+        <div class="shell">
+          <div class="project-copy project-copy-wide reveal">
+            <div class="project-meta">
+              <span class="project-number">02</span>
+              <span class="status status-built">Prototype built</span>
+            </div>
+            <p class="eyebrow">UCLA Integrated Sensors Laboratory</p>
+            <h2>Two cameras. One selective vision pipeline.</h2>
+            <p class="project-summary">
+              A wearable that uses a Himax WiseEye 2 for continuous low-power detection, then triggers an ESP32-S3 and OV5640 for a higher-resolution crop and cloud scene understanding.
+            </p>
+          </div>
+
+          <div class="wearable-stage">
+            <figure class="wearable-image wearable-front reveal">
+              <img src="assets/wearable-front.jpg" alt="Front of a compact black wearable enclosure with two camera openings" width="3024" height="4032" />
+              <figcaption>Dual-camera enclosure</figcaption>
+            </figure>
+            <figure class="wearable-image wearable-back reveal">
+              <img src="assets/wearable-back.jpg" alt="Open wearable enclosure showing the integrated camera and processing boards" width="3024" height="4032" />
+              <figcaption>Integrated ESP32-S3, Himax, and camera hardware</figcaption>
+            </figure>
+          </div>
+
+          <div class="fact-grid reveal">
+            <div class="fact"><strong>0.833</strong><span>reported average mAP<sub>50</sub></span></div>
+            <div class="fact"><strong>INT8</strong><span>quantized YOLOv5n</span></div>
+            <div class="fact"><strong>BLE</strong><span>selective image transfer</span></div>
+            <div class="fact"><strong>2-stage</strong><span>local detection → cloud context</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project project-mouse">
+        <div class="shell project-grid project-grid-reverse">
+          <div class="project-copy reveal">
+            <div class="project-meta">
+              <span class="project-number">03</span>
+              <span class="status status-built">Built · core functions demonstrated</span>
+            </div>
+            <p class="eyebrow">UCLA IEEE Micromouse</p>
+            <h2>A compact robot built around custom control hardware.</h2>
+            <p class="project-summary">
+              A two-layer STM32F205 board integrating dual motor drive, encoder feedback, four-direction IR sensing, power regulation, and debug access. Firmware used timer-based PWM, quadrature capture, and a 1 kHz control path.
+            </p>
+            <ul class="feature-list">
+              <li><span>01</span>Custom PCB from schematic through assembly</li>
+              <li><span>02</span>Time-multiplexed IR acquisition with ADC and DMA averaging</li>
+              <li><span>03</span>Closed-loop straight and turn control on a practice kit</li>
+            </ul>
+            <p class="scope-note">The robot did not complete a competition maze; flood-fill planning is intentionally not presented as a hardware result.</p>
+          </div>
+          <div class="mouse-media reveal">
+            <figure class="media-card mouse-hero">
+              <img src="assets/micromouse-final.jpeg" alt="Completed compact Micromouse robot with its custom electronics visible" width="3024" height="4032" loading="lazy" />
+              <figcaption>Assembled final robot</figcaption>
+            </figure>
+            <figure class="media-card mouse-pcb">
+              <img src="assets/micromouse-pcb.png" alt="Two-layer Micromouse printed circuit board layout" width="1476" height="948" loading="lazy" />
+              <figcaption>Custom two-layer PCB</figcaption>
+            </figure>
+          </div>
+        </div>
+      </article>
+
+      <article class="project project-vehicle">
+        <div class="shell">
+          <div class="project-copy project-copy-wide reveal">
+            <div class="project-meta">
+              <span class="project-number">04</span>
+              <span class="status status-designed">PCB designed · not fabricated</span>
+            </div>
+            <p class="eyebrow">Bruin Racing · Low Voltage</p>
+            <h2>Vehicle electronics, from board architecture to field debugging.</h2>
+            <p class="project-summary">
+              I designed the rear-control circuits and PCB around team-assigned interfaces for sensing, lighting, power, and CAN. On the prior vehicle system, I used simple transmit/receive firmware and physical harness isolation to restore differential communication.
+            </p>
+          </div>
+          <div class="vehicle-gallery reveal">
+            <figure class="vehicle-board">
+              <img src="assets/rear-control-pcb.png" alt="Rear-control PCB layout with power, sensing, CAN, and lighting sections" width="1276" height="884" loading="lazy" />
+              <figcaption>Rear-control PCB layout</figcaption>
+            </figure>
+            <figure class="vehicle-photo">
+              <img src="assets/supermileage-vehicle.jpg" alt="Bruin Racing Supermileage vehicle at Indianapolis Motor Speedway" width="4032" height="3024" loading="lazy" />
+              <figcaption>2026 Supermileage vehicle · Indianapolis</figcaption>
+            </figure>
+          </div>
+        </div>
+      </article>
+
+      <section class="about" id="about">
+        <div class="shell about-grid">
+          <figure class="about-photo reveal">
+            <img src="assets/jason-liu-profile.jpeg" alt="Jason Liu at a UCLA research presentation" width="3024" height="4032" loading="lazy" />
+          </figure>
+          <div class="about-copy reveal">
+            <p class="eyebrow">About</p>
+            <h2>I like the point where continuous-time hardware meets digital control.</h2>
+            <p>
+              I’m an electrical engineering student at UCLA interested in analog circuits, power electronics, embedded systems, and controls. I enjoy building systems that have to work through real constraints—noise, timing, safety, efficiency, and limited compute or energy.
+            </p>
+            <p>Outside engineering, I enjoy photography and playing basketball.</p>
+            <div class="about-links">
+              <a class="button button-primary" href="mailto:jasonliu131060@outlook.com">Email me</a>
+              <a class="text-link" href="https://www.linkedin.com/in/jingxuan-liu-0289502a7/" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+              <a class="text-link" href="assets/Jason_Liu_Resume_2026.pdf" target="_blank" rel="noreferrer">Resume <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <p>Jason Liu · Electrical Engineering</p>
+        <p><span data-year></span> · Designed for direct sharing</p>
+      </div>
+    </footer>
+  </body>
+</html>
