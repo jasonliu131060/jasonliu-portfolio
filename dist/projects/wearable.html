@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Dual-Camera Edge-AI Wearable · Jason Liu</title>
+  <meta name="description" content="A dual-camera wearable that detects targets locally on a Himax WiseEye 2 and sends only high-resolution crops over BLE for cloud scene understanding.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d1d1f'/%3E%3Cpath d='M38 16v22a10 10 0 0 1-20 0' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="nav">
+    <nav class="wrap nav-inner" aria-label="Primary">
+      <a class="nav-name" href="../index.html">Jason Liu</a>
+      <ul class="nav-links">
+        <li><a href="../index.html#work" aria-current="page">Work</a></li>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../assets/Jason_Liu_Resume_2026.pdf">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <p class="wrap crumb"><a href="../index.html#work">All work</a></p>
+
+    <header class="wrap cs-head">
+      <p class="state">Completed <span>· Jun – Aug 2026</span></p>
+      <h1 class="headline">Dual-camera edge-AI wearable.</h1>
+      <p class="lede">Local detection on a low-power AI processor, with cloud scene understanding only when it’s worth it.</p>
+      <dl class="cs-meta">
+        <div><dt>Organization</dt><dd>UCLA Integrated Sensors Laboratory · Samueli SURP</dd></div>
+        <div><dt>Timeline</dt><dd>Jun – Aug 2026</dd></div>
+        <div><dt>Role</dt><dd>Undergraduate researcher</dd></div>
+        <div><dt>Hardware</dt><dd>Himax WiseEye 2 (WE2) · ESP32-S3 · OV5640</dd></div>
+      </dl>
+      <p class="outcome"><strong>Outcome.</strong> A working prototype, finished during the summer research program. It detects posters, screens, billboards, and whiteboards on-device, then captures a high-resolution crop of the target and sends it over BLE for a vision-language model to describe.</p>
+    </header>
+
+    <figure class="wrap cs-hero">
+      <div class="frame white pad">
+        <img src="../assets/img/wearable-prototype-labeled.jpg" width="2000" height="793" alt="The wearable prototype. Front: the round opening holds the high-resolution camera and the square opening the low-resolution camera. Open back: the Bluetooth Low Energy SoC and the low-power AI processor.">
+      </div>
+      <figcaption><span class="evidence">Prototype</span>Final prototype, front and open back, with the main components labeled.</figcaption>
+    </figure>
+
+    <section class="cs-section" aria-labelledby="s-problem">
+      <div class="narrow">
+        <span class="kicker">Problem and constraints</span>
+        <h2 id="s-problem">Streaming video from a wearable is expensive.</h2>
+        <div class="prose">
+          <p>A body-worn camera that streams high-resolution frames to the cloud spends most of its energy and bandwidth on frames that contain nothing useful. A wearable has little room for a battery, and BLE has limited throughput.</p>
+          <p>The goal was to understand scenes with a vision-language model, but to use the radio and the cloud only when there is something worth describing.</p>
+        </div>
+      </div>
+      <figure class="wrap figure-block">
+        <div class="frame white pad">
+          <img src="../assets/img/wearable-applications.jpg" width="2000" height="839" loading="lazy" alt="Two example applications: content extraction, with a presentation screen detected in a lecture hall, and a navigation aid for the visually impaired, with a person using a phone, camera, and cane on a sidewalk.">
+        </div>
+        <figcaption><span class="evidence">Applications</span>Target uses: extracting content from screens and posters, and assisting navigation for people with visual impairments.</figcaption>
+      </figure>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-arch">
+      <div class="wrap">
+        <span class="kicker">System architecture</span>
+        <h2 id="s-arch">Two cameras, two stages.</h2>
+        <figure class="figure-block">
+          <div class="frame white pad">
+            <img src="../assets/img/wearable-two-stage-diagram.png" width="2000" height="657" loading="lazy" alt="Two-stage system. Stage 1: a low-resolution camera captures constant video and a low-power AI processor scans for significant events. Stage 2: a high-resolution camera is triggered by the AI processor, a Bluetooth Low Energy SoC transmits the image, and a vision-language model analyzes it on request.">
+          </div>
+          <figcaption><span class="evidence">Architecture</span>Stage 1 runs continuously at low power. Stage 2 runs only when the AI processor finds a target.</figcaption>
+        </figure>
+        <figure class="figure-block">
+          <div class="frame white pad">
+            <img src="../assets/img/wearable-poster-detection-flow.jpg" width="2000" height="769" loading="lazy" alt="Poster detection flow in three panels: a poster detected in a 192 by 192 pixel low-resolution frame; bounding-box gating and mapping to a high-resolution image cropped from 2560 by 1920 pixels; OCR preprocessing and a VLM response listing the poster's title, authors, institution, and summary.">
+          </div>
+          <figcaption><span class="evidence">Prototype output</span>From a 192 × 192 detection, to a crop from the 2560 × 1920 high-resolution frame, to the VLM’s structured summary of the poster.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-mine">
+      <div class="narrow">
+        <span class="kicker">My contribution</span>
+        <h2 id="s-mine">What I did.</h2>
+        <ul class="checklist">
+          <li>Built the dual-camera pipeline. The Himax WiseEye 2 detects continuously at low resolution, and the ESP32-S3 with an OV5640 captures at high resolution and transfers the image over BLE.</li>
+          <li>Trained a YOLOv5n detector (about 1.7 M parameters) in PyTorch on Open Images V7, then quantized it to INT8, shrinking it to about 1.7 MB so it fits on the Himax WE2 processor.</li>
+          <li>Calibrated the cross-camera perspective with an OpenCV homography, so boxes detected at low resolution map onto the OV5640 frame.</li>
+          <li>Tuned exposure, gain, and dynamic cropping so only the relevant region is transmitted, keeping BLE payloads small.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-decisions">
+      <div class="wrap">
+        <span class="kicker">Key engineering decisions</span>
+        <h2 id="s-decisions">Spend energy only where it matters.</h2>
+        <div class="decisions">
+          <div class="decision">
+            <h3>Quantize the model to fit the edge processor.</h3>
+            <p>The detector had to run on the Himax WE2 itself. Quantizing YOLOv5n to <strong>INT8</strong> brought it to about <strong>1.7 MB</strong>, and average mAP<sub>50</sub> changed by only −0.008.</p>
+          </div>
+          <div class="decision">
+            <h3>Split the work between local and cloud.</h3>
+            <p>Low-resolution detection runs on-device all the time because it is cheap. High-resolution capture and VLM inference happen <strong>only after a target is stable</strong>, which saves energy and bandwidth.</p>
+          </div>
+          <div class="decision">
+            <h3>Require a stable target before triggering.</h3>
+            <p>A single detection isn’t enough. The trigger fires when a target appears in <strong>four of six</strong> detection results, which filters out one-frame false positives before any expensive capture.</p>
+          </div>
+          <div class="decision">
+            <h3>Send a crop, not a frame.</h3>
+            <p>The calibrated mapping turns a 192 × 192 detection box into a crop of the 2560 × 1920 frame, so the radio carries only the region the VLM needs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-results">
+      <div class="wrap">
+        <span class="kicker">Verification and results</span>
+        <h2 id="s-results">What the prototype showed.</h2>
+        <div class="stat-row">
+          <div class="stat"><strong>0.833</strong><span>average mAP<sub>50</sub> across screens, posters, billboards, and whiteboards</span><small>Model evaluation</small></div>
+          <div class="stat"><strong>1.7 MB</strong><span>INT8 model on the Himax WE2, at −0.008 average mAP<sub>50</sub></span><small>After quantization</small></div>
+          <div class="stat"><strong>5.89 px</strong><span>median residual of the cross-camera mapping</span><small>Calibration log · OV5640, eight-pair set</small></div>
+        </div>
+
+        <figure class="figure-block" style="margin-top:40px">
+          <div class="frame white pad">
+            <img src="../assets/img/wearable-model-accuracy.png" width="1800" height="1176" loading="lazy" alt="Bar chart of per-class mAP50 with the change after INT8 quantization: screen 0.849 (+0.010), poster 0.784 (−0.028), billboard 0.795 (+0.046), whiteboard 0.906 (−0.061); average 0.833 (−0.008). Bar widths show each class's share of training images.">
+          </div>
+          <figcaption><span class="evidence">Model evaluation</span>Per-class mAP<sub>50</sub> with the change after INT8 quantization. Bar width is each class’s share of the training data; hatched classes had fewer than 100 test images.</figcaption>
+        </figure>
+
+        <div class="grid-2" style="margin-top:40px">
+          <figure>
+            <div class="frame" style="aspect-ratio:9/16;max-height:720px">
+              <video controls preload="none" playsinline poster="../assets/video/wearable-demo-poster.jpg" width="675" height="1200" style="height:100%;object-fit:cover">
+                <source src="../assets/video/wearable-demo.mp4" type="video/mp4">
+              </video>
+            </div>
+            <figcaption><span class="evidence">Prototype demo</span>The companion phone app receiving an image from the wearable over BLE (41 s).</figcaption>
+          </figure>
+          <figure>
+            <div class="frame white">
+              <img src="../assets/img/wearable-poster.jpg" width="1313" height="1800" loading="lazy" alt="Research poster titled A Wearable Device for Local and Cloud-Based Vision AI Processing, with sections on the two-stage pipeline, model training, and results.">
+            </div>
+            <figcaption><span class="evidence">Research poster</span>Summer 2026 research poster. Some components on it come from an earlier hardware revision; the prototype photo above shows the final configuration.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-iter">
+      <div class="narrow">
+        <span class="kicker">Debugging and iteration</span>
+        <h2 id="s-iter">When the telemetry disagreed with the device.</h2>
+        <div class="prose">
+          <p>At one point the reported stable-detection count said the trigger should fire, but the device wasn’t firing. The cause wasn’t the detector or the rule: the build flashed on the device still contained hidden vetoes.</p>
+          <p>The lesson was about process more than code. Before interpreting telemetry, confirm which build is actually running on the hardware.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-status">
+      <div class="wrap">
+        <span class="kicker">Where it ended</span>
+        <h2 id="s-status">State at the end of the program.</h2>
+        <div class="status-cols">
+          <div class="status-col">
+            <h3>Worked</h3>
+            <ul>
+              <li>End-to-end demo: detect, capture, crop, BLE, VLM description</li>
+              <li>Final hardware integrated in the enclosure</li>
+            </ul>
+          </div>
+          <div class="status-col">
+            <h3>Not verified</h3>
+            <ul>
+              <li>A Grove I²C check after later firmware changes</li>
+              <li>A fully documented BLE-versus-Wi-Fi energy comparison</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-skills">
+      <div class="narrow">
+        <span class="kicker">Skills demonstrated</span>
+        <h2 id="s-skills" class="sr-only">Skills</h2>
+        <ul class="tags">
+          <li>Edge AI deployment</li>
+          <li>Model quantization</li>
+          <li>Computer vision (OpenCV)</li>
+          <li>ESP32-S3 firmware</li>
+          <li>Bluetooth Low Energy</li>
+          <li>Hardware integration</li>
+        </ul>
+      </div>
+    </section>
+
+    <nav class="cs-next" aria-label="More projects">
+      <div class="wrap cs-next-inner">
+        <a href="converter.html"><small>‹ Previous project</small><strong>48 V to 12 V isolated converter</strong></a>
+        <a class="right" href="micromouse.html"><small>Next project ›</small><strong>Micromouse robot</strong></a>
+      </div>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p>© 2026 Jason Liu</p>
+      <p><a href="mailto:jasonliu131060@outlook.com">jasonliu131060@outlook.com</a></p>
+    </div>
+  </footer>
+</body>
+</html>

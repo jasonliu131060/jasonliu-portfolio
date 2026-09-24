@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Micromouse Robot · Jason Liu</title>
+  <meta name="description" content="A compact Micromouse robot built around a custom two-layer STM32F205 PCB with closed-loop motor control and time-multiplexed IR sensing.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d1d1f'/%3E%3Cpath d='M38 16v22a10 10 0 0 1-20 0' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="nav">
+    <nav class="wrap nav-inner" aria-label="Primary">
+      <a class="nav-name" href="../index.html">Jason Liu</a>
+      <ul class="nav-links">
+        <li><a href="../index.html#work" aria-current="page">Work</a></li>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../assets/Jason_Liu_Resume_2026.pdf">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <p class="wrap crumb"><a href="../index.html#work">All work</a></p>
+
+    <header class="wrap cs-head">
+      <p class="state">Completed <span>· Sep 2025 – May 2026</span></p>
+      <h1 class="headline">Micromouse robot: PCB, motion control, and IR sensing.</h1>
+      <p class="lede">A compact robot built around custom electronics, four-direction IR sensing, encoder feedback, and closed-loop motor control.</p>
+      <dl class="cs-meta">
+        <div><dt>Organization</dt><dd>UCLA IEEE Micromouse</dd></div>
+        <div><dt>Timeline</dt><dd>Sep 2025 – May 2026</dd></div>
+        <div><dt>Team</dt><dd>Three members</dd></div>
+        <div><dt>Tools</dt><dd>KiCad · STM32CubeIDE · C</dd></div>
+      </dl>
+      <p class="outcome"><strong>Outcome.</strong> The final robot was assembled and its subsystems worked. We did not validate a full competition maze run, so this page is about the hardware and control work, not maze solving.</p>
+    </header>
+
+    <figure class="wrap cs-hero">
+      <div class="frame cover" style="aspect-ratio:4/3">
+        <img src="../assets/img/micromouse-final.jpg" width="2000" height="1500" alt="Assembled Micromouse robot: red custom PCB with IR emitters and receivers at the front, two wheels, and a battery on a 3D-printed bracket.">
+      </div>
+      <figcaption><span class="evidence">Photo</span>The assembled final robot on its custom two-layer PCB.</figcaption>
+    </figure>
+
+    <section class="cs-section" aria-labelledby="s-problem">
+      <div class="narrow">
+        <span class="kicker">Problem and constraints</span>
+        <h2 id="s-problem">Everything on one small board.</h2>
+        <div class="prose">
+          <p>A Micromouse has to sense walls, know how far it has traveled, and drive straight and turn precisely. All of that fits on a board about the size of a palm, powered by a small battery.</p>
+          <p>That puts the MCU, motor drivers, encoders, IR emitters and receivers, power regulation, and debug access in one layout, where motor noise and sensitive analog sensing share the same ground.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-arch">
+      <div class="wrap">
+        <span class="kicker">System architecture</span>
+        <h2 id="s-arch">One MCU, two control problems.</h2>
+        <figure class="figure-block">
+          <div class="frame white pad">
+            <img src="../assets/diagrams/micromouse-architecture.svg" width="1200" height="560" loading="lazy" alt="Block diagram: STM32F205 at the center. It switches four IR emitters by GPIO and reads four phototransistors with ADC and DMA. It drives a dual H-bridge with four PWM channels and reads two encoders in quadrature. Power regulation above, SWD debug below.">
+          </div>
+          <figcaption><span class="evidence">Architecture</span>Sensing on the left and motion on the right, both handled by timer, ADC, and DMA peripherals on the STM32F205.</figcaption>
+        </figure>
+        <div class="grid-2">
+          <figure>
+            <div class="frame white">
+              <img src="../assets/img/micromouse-pcb.png" width="1122" height="1116" loading="lazy" alt="KiCad layout of the two-layer Micromouse PCB with the MCU at the center, IR emitters and receivers around the front edge, and motor mounts at the sides.">
+            </div>
+            <figcaption><span class="evidence">Design file</span>The two-layer PCB layout in KiCad.</figcaption>
+          </figure>
+          <figure>
+            <div class="frame cover" style="aspect-ratio:1/1">
+              <img src="../assets/img/micromouse-debugging.jpg" width="1200" height="1600" loading="lazy" alt="Bench debugging: the robot wired to a programmer board, with a bare PCB and a battery on the bench.">
+            </div>
+            <figcaption><span class="evidence">Photo</span>Bench bring-up and debugging with the programmer attached.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-mine">
+      <div class="narrow">
+        <span class="kicker">My contribution</span>
+        <h2 id="s-mine">What I did.</h2>
+        <p class="prose" style="color:var(--text-2)">Our three-person team built the robot. My work:</p>
+        <ul class="checklist">
+          <li>Designed and assembled the two-layer STM32F205 PCB in KiCad: dual H-bridge motor control, encoder inputs, four-direction IR sensing, power regulation, and debug interfaces.</li>
+          <li>Configured STM32 timers for quadrature encoder capture and four-channel motor PWM.</li>
+          <li>Implemented a 1 kHz closed-loop PD controller for straight-line motion and 90° turns.</li>
+          <li>Implemented time-multiplexed IR sensing with MOSFET-switched emitters, 12-bit ADC acquisition, and DMA averaging over 128 samples per reading.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-decisions">
+      <div class="wrap">
+        <span class="kicker">Key engineering decisions</span>
+        <h2 id="s-decisions">Small choices that make the sensors trustworthy.</h2>
+        <div class="decisions">
+          <div class="decision">
+            <h3>Fire one IR emitter at a time.</h3>
+            <p>Each emitter is switched on by its own MOSFET in sequence, and the phototransistor is given time to respond before sampling. That way each reading comes from one known direction and emitters don’t interfere with each other.</p>
+          </div>
+          <div class="decision">
+            <h3>Average in hardware, not in the loop.</h3>
+            <p>DMA collects <strong>128 samples</strong> per reading without CPU involvement. The averaged value makes wall detection more stable without taking time from the control loop.</p>
+          </div>
+          <div class="decision">
+            <h3>Close the motion loop at 1 kHz.</h3>
+            <p>Encoder counts give distance and angle errors. The PD terms are mixed into left and right motor commands with saturation limits and updated every millisecond.</p>
+          </div>
+          <div class="decision">
+            <h3>Tune on a practice kit first.</h3>
+            <p>We tuned PID/PD behavior on a practice kit before the custom board was ready, which separated control tuning from board bring-up.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-results">
+      <div class="wrap">
+        <span class="kicker">Verification and results</span>
+        <h2 id="s-results">What was demonstrated.</h2>
+        <div class="grid-2">
+          <div class="prose" style="margin-top:0">
+            <p>On the final robot, the PCB, motor drive, encoder capture, and IR sensing were brought up and worked. We have no recorded tracking-error or turn-accuracy data, so this page doesn’t claim any performance numbers.</p>
+            <p>The video shows the practice kit during PID tuning. It is not the final robot, and it is not a maze solve.</p>
+          </div>
+          <figure>
+            <div class="frame" style="aspect-ratio:9/16;max-height:640px">
+              <video controls preload="none" playsinline muted poster="../assets/video/micromouse-practice-poster.jpg" width="675" height="1200" style="height:100%;object-fit:cover">
+                <source src="../assets/video/micromouse-practice.mp4" type="video/mp4">
+              </video>
+            </div>
+            <figcaption><span class="evidence">Practice kit</span>PID tuning run on the practice kit, not the final robot (9 s).</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-iter">
+      <div class="narrow">
+        <span class="kicker">Debugging and iteration</span>
+        <h2 id="s-iter">An analog mistake on the final board.</h2>
+        <div class="prose">
+          <p>One failure on the final board came from the analog side, not the firmware: the IR sensing path had an incorrect divider value.</p>
+          <p>The takeaway is that sensor front-end component values need the same review before layout freeze as the code that reads them.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-status">
+      <div class="wrap">
+        <span class="kicker">Where it ended</span>
+        <h2 id="s-status">State at the end of the season.</h2>
+        <div class="status-cols">
+          <div class="status-col">
+            <h3>Worked</h3>
+            <ul>
+              <li>Custom PCB assembled and brought up</li>
+              <li>Motor PWM, encoder capture, and IR acquisition</li>
+            </ul>
+          </div>
+          <div class="status-col">
+            <h3>Not verified</h3>
+            <ul>
+              <li>A full competition maze run</li>
+              <li>Measured tracking and turn accuracy</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-skills">
+      <div class="narrow">
+        <span class="kicker">Skills demonstrated</span>
+        <h2 id="s-skills" class="sr-only">Skills</h2>
+        <ul class="tags">
+          <li>PCB design (KiCad)</li>
+          <li>STM32 timers, ADC, DMA</li>
+          <li>Motor control</li>
+          <li>PD feedback control</li>
+          <li>IR sensing</li>
+          <li>Embedded C</li>
+        </ul>
+      </div>
+    </section>
+
+    <nav class="cs-next" aria-label="More projects">
+      <div class="wrap cs-next-inner">
+        <a href="wearable.html"><small>‹ Previous project</small><strong>Dual-camera edge-AI wearable</strong></a>
+        <a class="right" href="rear-control.html"><small>Next project ›</small><strong>Supermileage rear-control board</strong></a>
+      </div>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p>© 2026 Jason Liu</p>
+      <p><a href="mailto:jasonliu131060@outlook.com">jasonliu131060@outlook.com</a></p>
+    </div>
+  </footer>
+</body>
+</html>

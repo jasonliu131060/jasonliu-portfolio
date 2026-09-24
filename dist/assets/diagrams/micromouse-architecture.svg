@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="t d">
+  <title id="t">Micromouse PCB system architecture</title>
+  <desc id="d">An STM32F205 sits at the center. It switches four IR emitters in sequence and reads four phototransistors through the 12-bit ADC with DMA averaging. It drives a dual H-bridge with four PWM channels and reads two encoders through timer quadrature inputs. A regulated battery supply powers the board, and SWD provides debug access. A 1 kHz PD loop closes the motion control.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#86868b"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0066cc"/></marker>
+  </defs>
+  <style>
+    text{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;fill:#1d1d1f}
+    .h{font-size:18px;font-weight:600}
+    .s{font-size:14px;fill:#6e6e73}
+    .l{font-size:13px;fill:#6e6e73}
+    .lb{font-size:13px;fill:#0066cc;font-weight:500}
+    .box{fill:#fff;stroke:#d2d2d7;stroke-width:1.5}
+    .mcu{fill:#f5f5f7;stroke:#1d1d1f;stroke-width:1.5}
+    .flow{stroke:#86868b;stroke-width:1.75;fill:none}
+    .ctl{stroke:#0066cc;stroke-width:1.75;fill:none}
+  </style>
+  <rect width="1200" height="560" fill="#fff"/>
+
+  <rect class="mcu" x="460" y="200" width="280" height="150" rx="16"/>
+  <text x="600" y="262" text-anchor="middle" class="h">STM32F205</text>
+  <text x="600" y="288" text-anchor="middle" class="s">timers · 12-bit ADC · DMA</text>
+
+  <rect class="box" x="460" y="40" width="280" height="96" rx="14"/>
+  <text x="600" y="82" text-anchor="middle" class="h">Power regulation</text>
+  <text x="600" y="106" text-anchor="middle" class="s">battery → logic rails</text>
+  <line class="flow" x1="600" y1="136" x2="600" y2="196" marker-end="url(#a)"/>
+
+  <rect class="box" x="460" y="420" width="280" height="96" rx="14"/>
+  <text x="600" y="462" text-anchor="middle" class="h">Debug</text>
+  <text x="600" y="486" text-anchor="middle" class="s">SWD programming</text>
+  <line class="flow" x1="600" y1="416" x2="600" y2="354" marker-end="url(#a)"/>
+
+  <!-- IR -->
+  <rect class="box" x="40" y="130" width="310" height="100" rx="14"/>
+  <text x="195" y="172" text-anchor="middle" class="h">IR emitters ×4</text>
+  <text x="195" y="196" text-anchor="middle" class="s">MOSFET-switched, one at a time</text>
+  <line class="flow" x1="456" y1="230" x2="354" y2="200" marker-end="url(#a)"/>
+  <text x="404" y="196" text-anchor="middle" class="l">GPIO</text>
+
+  <rect class="box" x="40" y="310" width="310" height="100" rx="14"/>
+  <text x="195" y="352" text-anchor="middle" class="h">Phototransistors ×4</text>
+  <text x="195" y="376" text-anchor="middle" class="s">wall distance</text>
+  <line class="flow" x1="350" y1="350" x2="456" y2="320" marker-end="url(#a)"/>
+  <text x="404" y="370" text-anchor="middle" class="l">ADC + DMA</text>
+  <text x="195" y="444" text-anchor="middle" class="l">128-sample average per reading</text>
+
+  <!-- motion -->
+  <rect class="box" x="850" y="130" width="310" height="100" rx="14"/>
+  <text x="1005" y="172" text-anchor="middle" class="h">Dual H-bridge</text>
+  <text x="1005" y="196" text-anchor="middle" class="s">two DC drive motors</text>
+  <line class="ctl" x1="744" y1="230" x2="846" y2="200" marker-end="url(#b)"/>
+  <text x="796" y="196" text-anchor="middle" class="lb">PWM ×4</text>
+
+  <rect class="box" x="850" y="310" width="310" height="100" rx="14"/>
+  <text x="1005" y="352" text-anchor="middle" class="h">Encoders ×2</text>
+  <text x="1005" y="376" text-anchor="middle" class="s">wheel position</text>
+  <line class="flow" x1="850" y1="350" x2="744" y2="320" marker-end="url(#a)"/>
+  <text x="796" y="370" text-anchor="middle" class="l">quadrature</text>
+
+  <text x="1005" y="444" text-anchor="middle" class="lb">1 kHz PD loop: distance + angle error → PWM</text>
+</svg>

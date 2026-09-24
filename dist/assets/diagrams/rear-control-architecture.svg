@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="t d">
+  <title id="t">Rear-control board architecture</title>
+  <desc id="d">A Nucleo-F446RE at the center. Torque and pressure sensor inputs pass through signal conditioning into an external ADC that feeds the MCU. An accelerometer also feeds the MCU. The MCU drives rear-light MOSFET outputs and talks to the vehicle over a CAN transceiver. 12 V power passes through the board with a power relay. The team assigned the MCU, the accelerometer, and the sensor jacks.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#86868b"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0066cc"/></marker>
+  </defs>
+  <style>
+    text{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;fill:#1d1d1f}
+    .h{font-size:18px;font-weight:600}
+    .s{font-size:14px;fill:#6e6e73}
+    .l{font-size:13px;fill:#6e6e73}
+    .lb{font-size:13px;fill:#0066cc;font-weight:500}
+    .tag{font-size:11px;fill:#6e6e73;font-weight:600;letter-spacing:.04em}
+    .box{fill:#fff;stroke:#d2d2d7;stroke-width:1.5}
+    .mcu{fill:#f5f5f7;stroke:#1d1d1f;stroke-width:1.5}
+    .flow{stroke:#86868b;stroke-width:1.75;fill:none}
+    .can{stroke:#0066cc;stroke-width:1.75;fill:none}
+  </style>
+  <rect width="1200" height="560" fill="#fff"/>
+
+  <rect class="box" x="460" y="30" width="280" height="96" rx="14"/>
+  <text x="600" y="72" text-anchor="middle" class="h">12 V pass-through</text>
+  <text x="600" y="96" text-anchor="middle" class="s">power relay · board rails</text>
+  <line class="flow" x1="600" y1="126" x2="600" y2="176" marker-end="url(#a)"/>
+
+  <rect class="mcu" x="460" y="180" width="280" height="180" rx="16"/>
+  <text x="600" y="258" text-anchor="middle" class="h">Nucleo-F446RE</text>
+  <text x="600" y="282" text-anchor="middle" class="s">STM32 interface</text>
+  <text x="600" y="330" text-anchor="middle" class="tag">TEAM-ASSIGNED</text>
+
+  <!-- sensing chain -->
+  <rect class="box" x="40" y="60" width="330" height="80" rx="14"/>
+  <text x="205" y="96" text-anchor="middle" class="h">Torque &amp; pressure inputs</text>
+  <text x="205" y="120" text-anchor="middle" class="tag">SENSOR JACKS · TEAM-ASSIGNED</text>
+  <line class="flow" x1="205" y1="140" x2="205" y2="176" marker-end="url(#a)"/>
+
+  <rect class="box" x="40" y="180" width="330" height="80" rx="14"/>
+  <text x="205" y="216" text-anchor="middle" class="h">Signal conditioning</text>
+  <text x="205" y="240" text-anchor="middle" class="s">conditioned sensor paths</text>
+  <line class="flow" x1="205" y1="260" x2="205" y2="296" marker-end="url(#a)"/>
+
+  <rect class="box" x="40" y="300" width="330" height="80" rx="14"/>
+  <text x="205" y="336" text-anchor="middle" class="h">External ADC</text>
+  <text x="205" y="360" text-anchor="middle" class="s">digitized sensor data</text>
+  <line class="flow" x1="370" y1="340" x2="456" y2="340" marker-end="url(#a)"/>
+
+  <rect class="box" x="40" y="430" width="330" height="80" rx="14"/>
+  <text x="205" y="466" text-anchor="middle" class="h">Accelerometer</text>
+  <text x="205" y="490" text-anchor="middle" class="tag">TEAM-ASSIGNED</text>
+  <path class="flow" d="M370 470 H600 V364" marker-end="url(#a)"/>
+
+  <!-- outputs -->
+  <rect class="box" x="830" y="180" width="330" height="80" rx="14"/>
+  <text x="995" y="216" text-anchor="middle" class="h">CAN transceiver</text>
+  <text x="995" y="240" text-anchor="middle" class="s">to vehicle CAN bus</text>
+  <line class="can" x1="744" y1="220" x2="826" y2="220" marker-start="url(#b)" marker-end="url(#b)"/>
+
+  <rect class="box" x="830" y="300" width="330" height="80" rx="14"/>
+  <text x="995" y="336" text-anchor="middle" class="h">Rear-light outputs</text>
+  <text x="995" y="360" text-anchor="middle" class="s">MOSFET-switched lighting</text>
+  <line class="flow" x1="740" y1="340" x2="826" y2="340" marker-end="url(#a)"/>
+</svg>

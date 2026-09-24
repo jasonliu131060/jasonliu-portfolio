@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 580" role="img" aria-labelledby="t d">
+  <title id="t">48 V to 12 V isolated converter architecture</title>
+  <desc id="d">The 48 V bus feeds an active-clamp primary stage, a 6:4 PQ32/30 transformer across the isolation barrier, synchronous rectification and an LC filter, and the 12 V output. A sensing front end feeds an STM32G474 that runs digital PWM regulation and a separate comparator fault path; gate drive returns to the primary and rectifier stages.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#86868b"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0066cc"/></marker>
+  </defs>
+  <style>
+    text{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;fill:#1d1d1f}
+    .h{font-size:19px;font-weight:600}
+    .s{font-size:14px;fill:#6e6e73}
+    .l{font-size:13px;fill:#6e6e73}
+    .lb{font-size:13px;fill:#0066cc;font-weight:500}
+    .box{fill:#fff;stroke:#d2d2d7;stroke-width:1.5}
+    .inner{fill:#f5f5f7;stroke:none}
+    .flow{stroke:#86868b;stroke-width:1.75;fill:none}
+    .gate{stroke:#0066cc;stroke-width:1.75;fill:none}
+    .sense{stroke:#86868b;stroke-width:1.5;fill:none;stroke-dasharray:5 5}
+    .iso{stroke:#bf4800;stroke-width:1.5;stroke-dasharray:7 6}
+  </style>
+  <rect width="1200" height="580" fill="#fff"/>
+
+  <!-- isolation barrier -->
+  <line class="iso" x1="600" y1="62" x2="600" y2="258"/>
+  <text x="600" y="48" text-anchor="middle" class="l" style="fill:#bf4800">Galvanic isolation</text>
+
+  <!-- power path -->
+  <rect class="box" x="30" y="100" width="170" height="120" rx="14"/>
+  <text x="115" y="152" text-anchor="middle" class="h">48 V bus</text>
+  <text x="115" y="176" text-anchor="middle" class="s">powertrain input</text>
+
+  <rect class="box" x="250" y="100" width="210" height="120" rx="14"/>
+  <text x="355" y="152" text-anchor="middle" class="h">Active-clamp</text>
+  <text x="355" y="176" text-anchor="middle" class="s">main + clamp switch</text>
+
+  <rect class="box" x="510" y="100" width="180" height="120" rx="14"/>
+  <text x="600" y="152" text-anchor="middle" class="h">Transformer</text>
+  <text x="600" y="176" text-anchor="middle" class="s">PQ32/30 · 6:4</text>
+
+  <rect class="box" x="740" y="100" width="210" height="120" rx="14"/>
+  <text x="845" y="152" text-anchor="middle" class="h">Sync. rectifier</text>
+  <text x="845" y="176" text-anchor="middle" class="s">forward + catch · LC</text>
+
+  <rect class="box" x="1000" y="100" width="170" height="120" rx="14"/>
+  <text x="1085" y="152" text-anchor="middle" class="h">12 V rail</text>
+  <text x="1085" y="176" text-anchor="middle" class="s">10 A · battery</text>
+  <text x="1085" y="196" text-anchor="middle" class="s">interface open</text>
+
+  <line class="flow" x1="200" y1="160" x2="246" y2="160" marker-end="url(#a)"/>
+  <line class="flow" x1="460" y1="160" x2="506" y2="160" marker-end="url(#a)"/>
+  <line class="flow" x1="690" y1="160" x2="736" y2="160" marker-end="url(#a)"/>
+  <line class="flow" x1="950" y1="160" x2="996" y2="160" marker-end="url(#a)"/>
+
+  <!-- control -->
+  <rect class="box" x="250" y="370" width="560" height="170" rx="16"/>
+  <text x="530" y="408" text-anchor="middle" class="h">STM32G474 control</text>
+  <rect class="inner" x="274" y="428" width="252" height="88" rx="10"/>
+  <text x="400" y="466" text-anchor="middle" style="font-size:16px;font-weight:600">Regulation</text>
+  <text x="400" y="490" text-anchor="middle" class="s">ADC → digital PWM</text>
+  <rect class="inner" x="534" y="428" width="252" height="88" rx="10"/>
+  <text x="660" y="466" text-anchor="middle" style="font-size:16px;font-weight:600">Fault path</text>
+  <text x="660" y="490" text-anchor="middle" class="s">comparators → shutdown</text>
+
+  <rect class="box" x="880" y="370" width="290" height="170" rx="16"/>
+  <text x="1025" y="438" text-anchor="middle" class="h">Sensing front end</text>
+  <text x="1025" y="464" text-anchor="middle" class="s">Kelvin-sensed shunts</text>
+  <text x="1025" y="484" text-anchor="middle" class="s">buffered dividers · NTCs</text>
+
+  <line class="sense" x1="1085" y1="222" x2="1085" y2="366" marker-end="url(#a)"/>
+  <text x="1097" y="300" class="l">V · I · T</text>
+  <line class="flow" x1="880" y1="455" x2="814" y2="455" marker-end="url(#a)"/>
+  <text x="847" y="444" text-anchor="middle" class="l">analog</text>
+
+  <!-- gate drive -->
+  <line class="gate" x1="355" y1="370" x2="355" y2="224" marker-end="url(#b)"/>
+  <line class="gate" x1="780" y1="370" x2="780" y2="224" marker-end="url(#b)"/>
+  <text x="367" y="300" class="lb">gate drive</text>
+  <text x="792" y="300" class="lb">SR gate drive</text>
+</svg>
