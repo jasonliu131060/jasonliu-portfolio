@@ -35,7 +35,7 @@
         <div><dt>Organization</dt><dd>UCLA Integrated Sensors Laboratory · Samueli SURP</dd></div>
         <div><dt>Timeline</dt><dd>Jun – Aug 2026</dd></div>
         <div><dt>Role</dt><dd>Undergraduate researcher</dd></div>
-        <div><dt>Hardware</dt><dd>Himax WiseEye 2 (WE2) · ESP32-S3 · OV5640</dd></div>
+        <div><dt>Hardware</dt><dd>Himax WiseEye 2 (WE2) · ESP32-S3 · OV5640 · nRF52840</dd></div>
       </dl>
       <p class="outcome"><strong>Outcome.</strong> A working prototype, finished during the summer research program. It detects posters, screens, billboards, and whiteboards on-device, then captures a high-resolution crop of the target and sends it over BLE for a vision-language model to describe.</p>
     </header>
@@ -92,6 +92,7 @@
           <li>Trained a YOLOv5n detector (about 1.7 M parameters) in PyTorch on Open Images V7, then quantized it to INT8, shrinking it to about 1.7 MB so it fits on the Himax WE2 processor.</li>
           <li>Calibrated the cross-camera perspective with an OpenCV homography, so boxes detected at low resolution map onto the OV5640 frame.</li>
           <li>Tuned exposure, gain, and dynamic cropping so only the relevant region is transmitted, keeping BLE payloads small.</li>
+          <li>Ported an ArduCAM OV2640 SPI burst driver (8 MHz) to Zephyr with the nRF Connect SDK, then measured the energy to send one image over BLE on an nRF52840 versus over Wi-Fi on an ESP32 with a Power Profiler Kit II.</li>
         </ul>
       </div>
     </section>
@@ -130,6 +131,13 @@
           <div class="stat"><strong>1.7 MB</strong><span>INT8 model on the Himax WE2, at −0.008 average mAP<sub>50</sub></span><small>After quantization</small></div>
           <div class="stat"><strong>5.89 px</strong><span>median residual of the cross-camera mapping</span><small>Calibration log · OV5640, eight-pair set</small></div>
         </div>
+
+        <div class="compare" role="group" aria-label="Measured energy per image, BLE versus Wi-Fi" style="margin-top:40px">
+          <div><strong>0.37 J</strong><span>per image over BLE · nRF52840</span></div>
+          <div class="arrow" aria-hidden="true">vs</div>
+          <div><strong>2.41 J</strong><span>per image over Wi-Fi · ESP32</span></div>
+        </div>
+        <p class="compare-note"><span class="evidence">Measured on hardware</span>Power Profiler Kit II, OV2640 camera with an 8 MHz SPI burst driver ported to Zephyr and the nRF Connect SDK. Sending an image over BLE took about 6.5× less energy than Wi-Fi, which supports using BLE for the wearable’s image link.</p>
 
         <figure class="figure-block" style="margin-top:40px">
           <div class="frame white pad">
@@ -177,6 +185,7 @@
             <h3>Worked</h3>
             <ul>
               <li>End-to-end demo: detect, capture, crop, BLE, VLM description</li>
+              <li>BLE measured at 0.37 J per image versus 2.41 J over Wi-Fi</li>
               <li>Final hardware integrated in the enclosure</li>
             </ul>
           </div>
@@ -184,7 +193,6 @@
             <h3>Not verified</h3>
             <ul>
               <li>A Grove I²C check after later firmware changes</li>
-              <li>A fully documented BLE-versus-Wi-Fi energy comparison</li>
             </ul>
           </div>
         </div>
@@ -199,9 +207,9 @@
           <li>Edge AI deployment</li>
           <li>Model quantization</li>
           <li>Computer vision (OpenCV)</li>
-          <li>ESP32-S3 firmware</li>
+          <li>Embedded firmware (ESP-IDF, Zephyr)</li>
           <li>Bluetooth Low Energy</li>
-          <li>Hardware integration</li>
+          <li>Power measurement</li>
         </ul>
       </div>
     </section>
