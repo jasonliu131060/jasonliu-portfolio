@@ -25,98 +25,94 @@
   </header>
 
   <main id="main">
-    <p class="wrap crumb"><a href="../index.html#work">All work</a></p>
+    <p class="wrap crumb"><a href="../index.html#work">All projects</a></p>
 
     <header class="wrap cs-head">
       <p class="state now">In progress <span>· Jun 2026 – present</span></p>
-      <h1 class="headline">48 V to 12 V, 120 W isolated forward converter.</h1>
-      <p class="lede">Power stage, magnetics, sensing, and digital-control design for a hydrogen fuel-cell vehicle.</p>
+      <h1 class="headline">48 V to 12 V isolated forward converter</h1>
+      <p class="lede">A 120 W isolated DC-DC converter I’m designing for Bruin Racing’s hydrogen fuel-cell Supermileage car.</p>
       <dl class="cs-meta">
-        <div><dt>Organization</dt><dd>Bruin Racing · Supermileage Vehicle</dd></div>
+        <div><dt>Team</dt><dd>Bruin Racing · Supermileage Vehicle</dd></div>
         <div><dt>Timeline</dt><dd>Jun 2026 – present</dd></div>
         <div><dt>Role</dt><dd>Powertrain project engineer</dd></div>
-        <div><dt>Tools</dt><dd>LTspice · Infineon vendor models · STM32G474</dd></div>
+        <div><dt>Tools</dt><dd>LTspice · STM32G474</dd></div>
       </dl>
-      <p class="outcome"><strong>Where it is now.</strong> This is my current project. The design is still in simulation, so every result on this page comes from LTspice, not hardware. The active-clamp design keeps output ripple under 0.8% at eight load points from 0.25 to 10 A. I’m now testing a two-switch forward version to meet the Shell Eco-marathon 60 V maximum-voltage rule.</p>
+      <p class="outcome">This is my current project. Everything here is still in simulation, and the hardware build hasn’t started yet. Right now I’m comparing the active-clamp design with a two-switch forward version that keeps the switch voltage under the 60 V limit in the Shell Eco-marathon rules.</p>
     </header>
 
     <figure class="wrap cs-hero">
       <div class="frame white pad">
         <img src="../assets/diagrams/converter-architecture.svg" width="1200" height="580" alt="Block diagram: 48 V bus, active-clamp primary, 6:4 transformer across the isolation barrier, synchronous rectifier and LC filter, 12 V rail. Below, a sensing front end feeds an STM32G474 with separate regulation and fault paths; gate drive returns to the primary and rectifier.">
       </div>
-      <figcaption><span class="evidence">Architecture</span>Simplified view of the active-clamp design that I simulated. The battery interface on the 12 V side is part of the plan but not yet finalized.</figcaption>
+      <figcaption>Simplified block diagram of the active-clamp design. The battery connection on the 12 V side hasn’t been finalized yet.</figcaption>
     </figure>
 
     <section class="cs-section" aria-labelledby="s-problem">
       <div class="narrow">
-        <span class="kicker">Problem and constraints</span>
-        <h2 id="s-problem">An isolated low-voltage rail from a 48 V powertrain.</h2>
+        <h2 id="s-problem">Background</h2>
         <div class="prose">
-          <p>The vehicle needs a galvanically isolated 12 V supply from its nominal 48 V powertrain bus. The same converter is also meant to charge the low-voltage battery. The target is 12 V at 10 A (120 W) with 200 kHz switching.</p>
-          <p>It’s more than a topology choice: magnetics, switching behavior, synchronous rectification, mixed-signal sensing, protection, and digital control all have to work together. The design also has to meet the Shell Eco-marathon 60 V maximum-voltage requirement.</p>
+          <p>The car runs on a 48 V bus, and its low-voltage electronics need a separate, isolated 12 V supply. The same converter will also charge the 12 V battery. My target is 12 V at 10 A (120 W), switching at 200 kHz.</p>
+          <p>The design has to meet the Shell Eco-marathon’s 60 V maximum-voltage rule, and that rule ended up shaping a lot of my decisions.</p>
         </div>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-mine">
       <div class="narrow">
-        <span class="kicker">My contribution</span>
-        <h2 id="s-mine">What I’m doing.</h2>
+        <h2 id="s-mine">What I did</h2>
         <ul class="checklist">
-          <li>Designed and simulated the 120 W, 200 kHz active-clamp power stage in LTspice using Infineon OptiMOS6 150 V vendor models.</li>
-          <li>Modeled the custom PQ32/30 N97 transformer (6:4 turns, 180 µH nominal magnetizing inductance), with winding leakage as a parameter, and retuned 45–420 ns dead times to characterize switching behavior and device stress.</li>
-          <li>Designed sensing front ends for protection on an STM32G474: Kelvin-sensed shunts, unity-gain-buffered voltage dividers, and NTC temperature sensing, feeding the on-chip ADC and comparator-driven fault shutdown.</li>
-          <li>Testing a two-switch forward version in simulation. It clamps the primary switch nodes to the 48 V input rail to meet the 60 V rule.</li>
+          <li>Designed the active-clamp power stage and simulated it in LTspice using Infineon’s OptiMOS6 150 V MOSFET models.</li>
+          <li>Modeled the PQ32/30 N97 transformer (6:4 turns, 180 µH magnetizing inductance) and swept leakage inductance and dead time (45–420 ns) to see how they affect switching and MOSFET voltage stress.</li>
+          <li>Designed the protection sensing circuits for an STM32G474: Kelvin-sensed current shunts, buffered voltage dividers, and NTC thermistors, read by the chip’s ADC and comparators.</li>
+          <li>Started simulating a two-switch forward converter as an alternative that stays under 60 V.</li>
         </ul>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-blocks">
       <div class="wrap">
-        <span class="kicker">Block diagrams</span>
-        <h2 id="s-blocks">Earlier design review.</h2>
-        <p class="note">These block diagrams show an earlier version of the design. I’m now designing a new version with different components, so part choices and values here don’t match the current design.</p>
+        <h2 id="s-blocks">Block diagrams</h2>
+        <p class="note">I made these block diagrams for an earlier design review. I’ve since changed components and I’m working on a new version, so some parts and values in them are out of date.</p>
         <figure class="figure-block">
           <div class="frame white pad">
             <img src="../assets/img/converter-block-top-level.jpg" width="1390" height="775" loading="lazy" alt="Top-level block diagram: the power stage sends protected input, converter voltage and current, primary and battery current, valley detection, and two temperature signals to the control stage, which returns four PWM signals and connects to CAN.">
           </div>
-          <figcaption><span class="evidence">Earlier design</span>Top level: signals between the power stage and the control stage.</figcaption>
+          <figcaption>Top level: the signals passed between the power stage and the control stage.</figcaption>
         </figure>
         <figure class="figure-block">
           <div class="frame white pad">
             <img src="../assets/img/converter-block-power-stage.jpg" width="1922" height="1392" loading="lazy" alt="Power-stage block diagram: primary side with input protection, clamp capacitor, active-clamp and main switches, primary shunt, and temperature sensing; transformer; secondary side with forward and catch rectifiers, output choke, converter and battery shunts, fuses, and sensing; gate drive, SR controller, and LDO blocks.">
           </div>
-          <figcaption><span class="evidence">Earlier design</span>Power stage: primary side, transformer, secondary side, gate drive, and local supplies.</figcaption>
+          <figcaption>Power stage: primary side, transformer, secondary side, gate drivers, and local supplies.</figcaption>
         </figure>
         <figure class="figure-block">
           <div class="frame white pad">
             <img src="../assets/img/converter-block-control-stage.jpg" width="1612" height="759" loading="lazy" alt="Control-stage block diagram on the STM32G474RE: ADC and comparator inputs, scaling and validation, a charge/load supervisor, constant-voltage and constant-current PI loops with a minimum selector, feed-forward and limits into HRTIM PWM, valley event capture, fault logic with shutdown, CAN, and a digital isolator for primary-side gate drive.">
           </div>
-          <figcaption><span class="evidence">Earlier design</span>Control stage: CV/CC regulation, fault logic, and PWM generation on the STM32G474RE.</figcaption>
+          <figcaption>Control stage on the STM32G474RE: voltage and current regulation, fault logic, and PWM generation.</figcaption>
         </figure>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-decisions">
       <div class="wrap">
-        <span class="kicker">Key engineering decisions</span>
-        <h2 id="s-decisions">Why the design looks the way it does.</h2>
+        <h2 id="s-decisions">Design decisions</h2>
         <div class="decisions">
           <div class="decision">
-            <h3>Test a two-switch forward to meet the 60 V rule.</h3>
-            <p>In the active-clamp simulations, the main-switch node rises <strong>above 80 V</strong> while the clamp resets the transformer, which exceeds the Shell Eco-marathon’s 60 V limit. A two-switch forward clamps both primary switch nodes to the 48 V input rail, so I’m testing it as the rule-compliant option.</p>
+            <h3>Trying a two-switch forward for the 60 V rule</h3>
+            <p>In my active-clamp simulations, the main switch goes above 80 V while the transformer resets, which is over the 60 V limit. In a two-switch forward, diodes clamp both switch nodes to the 48 V input, so I’m testing it as the alternative.</p>
           </div>
           <div class="decision">
-            <h3>Make synchronous rectification depend on the operating mode.</h3>
-            <p>Driving the catch MOSFET on while the output choke was in discontinuous conduction made its drain-voltage stress worse. Disabling that gate drive in DCM lowered the simulated peak at 1.5 A from <strong>74.4 V to 52.8 V</strong>. I checked the whole conduction interval, not a single switching instant.</p>
+            <h3>Turning off the catch rectifier at light load</h3>
+            <p>At light load the output inductor runs in discontinuous mode. Keeping the catch MOSFET switched on in that mode made its voltage spikes worse, so I turn its gate drive off in DCM. At 1.5 A, that brought the simulated peak down from 74.4 V to 52.8 V.</p>
           </div>
           <div class="decision">
-            <h3>Keep fault shutdown separate from regulation.</h3>
-            <p>Normal regulation runs digitally, from the ADC to PWM on the STM32G474. Fault shutdown runs through the on-chip comparators instead of waiting for the control loop, so protection doesn’t depend on firmware responding in time.</p>
+            <h3>Fault shutdown in hardware</h3>
+            <p>Regulation runs in firmware on the STM32G474, but fault shutdown goes through the chip’s built-in comparators. That way the converter can shut off without waiting on the control loop.</p>
           </div>
           <div class="decision">
-            <h3>Design around the real magnetics and their tolerance.</h3>
-            <p>The transformer model follows the specified core: 6:4 turns and <strong>180 µH</strong> nominal magnetizing inductance, with a 144–234 µH catalog tolerance. Leakage is a parameter, not a fixed number, so the dead times can be retuned as the winding design firms up.</p>
+            <h3>Planning for transformer tolerance</h3>
+            <p>The core’s inductance can vary anywhere from 144 to 234 µH. I kept leakage inductance as a variable in the model so I can retune the dead times once a real transformer is wound and measured.</p>
           </div>
         </div>
       </div>
@@ -124,76 +120,72 @@
 
     <section class="cs-section" aria-labelledby="s-xfmr">
       <div class="narrow">
-        <span class="kicker">Transformer design card</span>
-        <h2 id="s-xfmr">Magnetics for the active-clamp design.</h2>
-          <dl class="spec">
+        <h2 id="s-xfmr">Transformer</h2>
+        <dl class="spec">
           <div><dt>Core</dt><dd>TDK PQ32/30, N97 ferrite, ungapped</dd></div>
           <div><dt>Turns</dt><dd>6 : 4</dd></div>
           <div><dt>A<sub>L</sub></dt><dd>5000 nH/turn² (+30 / −20%)</dd></div>
-          <div><dt>Magnetizing L</dt><dd>180 µH nominal · 144–234 µH catalog range</dd></div>
-          <div><dt>Leakage</dt><dd>0.65 µH primary-referred, a provisional sensitivity point until the first transformer is measured</dd></div>
-          <div><dt>Dead time</dt><dd>45–420 ns, retuned per operating mode</dd></div>
+          <div><dt>Magnetizing L</dt><dd>180 µH nominal (144–234 µH range)</dd></div>
+          <div><dt>Leakage</dt><dd>0.65 µH, an estimate until the transformer is built and measured</dd></div>
+          <div><dt>Dead time</dt><dd>45–420 ns, depending on operating mode</dd></div>
         </dl>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-waves">
       <div class="wrap">
-        <span class="kicker">Simulation waveforms</span>
-        <h2 id="s-waves">Steady state at full load.</h2>
+        <h2 id="s-waves">Full-load waveforms</h2>
         <figure class="figure-block">
           <div class="frame white pad">
             <img src="../assets/diagrams/converter-waveforms-10a.svg" width="1000" height="802" loading="lazy" alt="Four stacked plots over three 5 µs switching periods at 10 A: main-switch drain voltage switching between 0 and about 82 V, above a dashed 60 V line; primary current up to about 8 A with ringing; output-choke current ramping between about 8.7 and 11.2 A; and output voltage near 12.35 V varying by under 20 mV.">
           </div>
-          <figcaption><span class="evidence">Simulated</span>Active-clamp design at 48 V input and 10 A load: LTspice 26.0.2, Infineon OptiMOS6 150 V models, 25 °C, open loop. The dashed line marks the Shell 60 V limit, which is why I’m testing the two-switch forward.</figcaption>
+          <figcaption>LTspice simulation of the active-clamp design at 48 V in and 10 A out (open loop, 25 °C). The dashed line is the 60 V limit. The main switch goes well above it, which is why I’m also looking at the two-switch forward.</figcaption>
         </figure>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-tsf">
       <div class="wrap">
-        <span class="kicker">In progress</span>
-        <h2 id="s-tsf">Two-switch forward: staying under 60 V.</h2>
+        <h2 id="s-tsf">Two-switch forward converter</h2>
         <div class="prose narrow" style="margin-left:0">
-          <p>In a two-switch forward, the transformer primary sits between a high-side and a low-side switch. Clamp diodes return the magnetizing energy to the input, so neither switch node can rise much above the 48 V input rail.</p>
-          <p>That removes the active-clamp reset overvoltage and keeps the primary within the Shell Eco-marathon 60 V limit. The trade-off is that duty cycle must stay below 50% so the core can reset. I’m still testing this version in simulation before choosing it over the active clamp.</p>
+          <p>In a two-switch forward, the transformer sits between a high-side and a low-side MOSFET. When both turn off, two diodes send the transformer’s stored energy back to the input. That holds the switch voltage at about 48 V instead of letting it rise above it.</p>
+          <p>The downside is that the duty cycle has to stay under 50% so the transformer can reset each cycle. I’m still running simulations before deciding which topology to build.</p>
         </div>
         <figure class="figure-block">
           <div class="frame white">
             <img src="../assets/img/two-switch-ltspice.png" width="2200" height="931" loading="lazy" alt="LTspice window. Left: waveforms of the output voltage near 12 V, the two primary switch-node voltages switching between about 0 and 48 V, and load current near 10 A. Right: schematic of a two-switch forward with two MOSFETs, two clamp diodes, a coupled transformer, rectifier diodes, and an LC output filter.">
           </div>
-          <figcaption><span class="evidence">Simulated · in progress</span>Two-switch forward test in LTspice at 48 V input and about 10 A into 1.2 Ω. Both primary switch nodes, V(l_h) and V(l_l), stay at about the 48 V input rail; the output V(v_out) sits near 12 V.</figcaption>
+          <figcaption>An early LTspice run of the two-switch version at 48 V in and about 10 A out. Both switch nodes, V(l_h) and V(l_l), stay at about 48 V, and the output sits near 12 V.</figcaption>
         </figure>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-status">
       <div class="wrap">
-        <span class="kicker">Current status and next steps</span>
-        <h2 id="s-status">Where the project stands.</h2>
+        <h2 id="s-status">Status</h2>
         <div class="status-cols">
           <div class="status-col">
-            <h3>Working in simulation</h3>
+            <h3>Done in simulation</h3>
             <ul>
-              <li>Active clamp: output ripple under 0.8% from 0.25 to 10 A</li>
-              <li>Mode-dependent SR lowers catch-device stress</li>
-              <li>Sensing and protection front ends designed</li>
+              <li>Active-clamp design with under 0.8% output ripple from 0.25 to 10 A</li>
+              <li>Lower catch-MOSFET stress at light load</li>
+              <li>Protection sensing circuits</li>
             </ul>
           </div>
           <div class="status-col">
-            <h3 class="now">In progress</h3>
+            <h3 class="now">Working on now</h3>
             <ul>
-              <li>Two-switch forward tests for the 60 V rule</li>
-              <li>New design iteration with updated components</li>
-              <li>Battery charge voltage and interface</li>
+              <li>Two-switch forward simulations</li>
+              <li>A new design with updated components</li>
+              <li>Battery charging voltage and connection</li>
             </ul>
           </div>
           <div class="status-col">
             <h3>Next</h3>
             <ul>
-              <li>Topology decision · PCB parasitics</li>
-              <li>Transformer build and leakage measurement</li>
-              <li>Protection bring-up, low-voltage startup, then controlled power tests</li>
+              <li>Pick a topology and lay out the PCB</li>
+              <li>Wind the transformer and measure its leakage</li>
+              <li>Bring up protection, then test at low voltage before full power</li>
             </ul>
           </div>
         </div>
@@ -202,22 +194,21 @@
 
     <section class="cs-section" aria-labelledby="s-skills">
       <div class="narrow">
-        <span class="kicker">Skills demonstrated</span>
-        <h2 id="s-skills" class="sr-only">Skills</h2>
+        <h2 id="s-skills">Skills</h2>
         <ul class="tags">
           <li>Power electronics</li>
-          <li>Magnetics design</li>
-          <li>LTspice simulation</li>
+          <li>Magnetics</li>
+          <li>LTspice</li>
           <li>Mixed-signal sensing</li>
-          <li>Protection design</li>
-          <li>STM32G474</li>
+          <li>Protection circuits</li>
+          <li>STM32</li>
         </ul>
       </div>
     </section>
 
     <nav class="cs-next" aria-label="More projects">
       <div class="wrap cs-next-inner">
-        <a href="../index.html#work"><small>‹ Back</small><strong>All work</strong></a>
+        <a href="../index.html#work"><small>‹ Back</small><strong>All projects</strong></a>
         <a class="right" href="wearable.html"><small>Next project ›</small><strong>Dual-camera edge-AI wearable</strong></a>
       </div>
     </nav>

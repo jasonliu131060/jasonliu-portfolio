@@ -25,95 +25,92 @@
   </header>
 
   <main id="main">
-    <p class="wrap crumb"><a href="../index.html#work">All work</a></p>
+    <p class="wrap crumb"><a href="../index.html#work">All projects</a></p>
 
     <header class="wrap cs-head">
       <p class="state">Completed <span>· Sep 2025 – Jun 2026</span></p>
-      <h1 class="headline">Supermileage rear-control board and low-voltage integration.</h1>
-      <p class="lede">Board design for rear lighting, sensing, and CAN, plus hands-on debugging of the vehicle’s existing low-voltage system.</p>
+      <h1 class="headline">Supermileage rear-control board</h1>
+      <p class="lede">A rear lighting, sensing, and CAN board I designed for the Bruin Racing Supermileage car, plus fixing the car’s CAN wiring at competition.</p>
       <dl class="cs-meta">
-        <div><dt>Organization</dt><dd>Bruin Racing · Supermileage Vehicle</dd></div>
+        <div><dt>Team</dt><dd>Bruin Racing · Supermileage Vehicle</dd></div>
         <div><dt>Timeline</dt><dd>Sep 2025 – Jun 2026</dd></div>
         <div><dt>Role</dt><dd>Low-voltage subteam member</dd></div>
-        <div><dt>Tools</dt><dd>KiCad · STM32 Nucleo · Arduino · RP2040</dd></div>
+        <div><dt>Tools</dt><dd>KiCad · STM32 Nucleo · RP2040</dd></div>
       </dl>
-      <p class="outcome"><strong>Two contributions, kept separate.</strong> (1) I designed a rear-control PCB, my first complete flow from block diagram to schematic to two-layer layout. It has not been fabricated. (2) On the prior-generation system used on the 2026 vehicle, I did hardware integration and on-site CAN debugging.</p>
+      <p class="outcome">This page covers two things. The first is the rear-control board, my first full PCB design from block diagram to schematic to two-layer layout. It was never fabricated. The second is hands-on work on the car’s existing low-voltage system, including fixing CAN at the 2026 Shell Eco-marathon.</p>
     </header>
 
     <figure class="wrap cs-hero">
       <div class="frame white pad">
         <img src="../assets/img/rear-control-pcb.png" width="1328" height="982" alt="KiCad layout of the two-layer rear-control PCB: Nucleo headers in the middle, lighting MOSFETs and connectors on the left, and sensing and CAN circuitry on the right.">
       </div>
-      <figcaption><span class="evidence">Design file</span>Rear-control PCB layout in KiCad. This board is designed but has not been manufactured.</figcaption>
+      <figcaption>The rear-control board layout in KiCad.</figcaption>
     </figure>
 
     <section class="cs-section" aria-labelledby="s-a">
       <div class="narrow">
-        <span class="kicker">Part one · board design</span>
-        <h2 id="s-a">A rear-control board around a Nucleo-F446RE.</h2>
+        <h2 id="s-a">The board</h2>
         <div class="prose">
-          <p>The team assigned the required components and interfaces, including the MCU, the accelerometer, and the sensor jacks. I designed the circuits and completed the schematic and layout.</p>
+          <p>The team picked the main parts and interfaces, including the Nucleo-F446RE, the accelerometer, and the sensor connectors. I designed the circuits around them and did the schematic and layout. The board has:</p>
         </div>
         <ul class="checklist">
           <li>12 V power pass-through with a power relay</li>
-          <li>MOSFET outputs for rear lighting</li>
-          <li>CAN transceiver for communication with the rest of the low-voltage system</li>
-          <li>Signal conditioning for the torque and pressure sensor inputs, into an external ADC</li>
-          <li>Accelerometer and Nucleo-F446RE interface</li>
+          <li>MOSFET outputs for the rear lights</li>
+          <li>A CAN transceiver to talk to the rest of the low-voltage system</li>
+          <li>Signal conditioning for the torque and pressure sensors, feeding an external ADC</li>
+          <li>The accelerometer and the Nucleo-F446RE connection</li>
         </ul>
       </div>
     </section>
 
-    <section class="cs-section" aria-label="Board architecture">
+    <section class="cs-section" aria-label="Board diagrams">
       <div class="wrap">
         <figure>
           <div class="frame white pad">
             <img src="../assets/diagrams/rear-control-architecture.svg" width="1200" height="560" loading="lazy" alt="Block diagram: torque and pressure inputs pass through signal conditioning and an external ADC into a Nucleo-F446RE. An accelerometer also feeds the MCU. The MCU drives rear-light outputs and connects to a CAN transceiver. 12 V pass-through with a power relay feeds the board.">
           </div>
-          <figcaption><span class="evidence">Architecture</span>Subsystem view of the rear-control board. Blocks marked team-assigned were set by the team; I designed the circuits around them.</figcaption>
+          <figcaption>Block diagram of the board. The parts marked team-assigned were chosen by the team.</figcaption>
         </figure>
         <figure class="figure-block">
           <div class="frame white">
             <img src="../assets/img/rear-control-schematic.png" width="2064" height="1328" loading="lazy" alt="Full KiCad schematic of the rear-control board.">
           </div>
-          <figcaption><span class="evidence">Design file</span>Full schematic.</figcaption>
+          <figcaption>The full schematic.</figcaption>
         </figure>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-b">
       <div class="narrow">
-        <span class="kicker">Part two · vehicle integration</span>
-        <h2 id="s-b">Finding a CAN fault at the track.</h2>
+        <h2 id="s-b">Fixing CAN at Indianapolis</h2>
         <div class="prose">
-          <p>On the prior-generation low-voltage system, I did soldering, crimping, cable and board bring-up, voltmeter and serial debugging, and RP2040 firmware work.</p>
-          <p>At the 2026 Shell Eco-marathon in Indianapolis, CAN messages weren’t being received. I isolated the fault with simple, practical checks:</p>
+          <p>I also worked on the car’s existing low-voltage system: soldering, crimping, wiring, bringing up boards, debugging with a multimeter and serial output, and writing RP2040 firmware.</p>
+          <p>At the 2026 Shell Eco-marathon, CAN messages weren’t getting through between the boards. Here’s how I tracked it down:</p>
         </div>
         <ol class="steps">
-          <li>Loaded simple Arduino transmit and receive sketches onto the connected boards to see whether messages arrived.</li>
-          <li>Worked segment by segment through the harness to find where reception failed.</li>
-          <li>Found polarity reversals and harness discontinuities, then repaired them.</li>
-          <li>Confirmed messages were received again. The repair made it possible to pass most of the electrical technical inspection.</li>
+          <li>Loaded simple transmit and receive test firmware onto the connected boards to check whether messages arrived.</li>
+          <li>Went through the wiring harness one section at a time to find where messages stopped.</li>
+          <li>Found reversed pinouts and damaged wiring, and repaired them.</li>
+          <li>Confirmed messages were getting through again. That fix let the car pass most of the electrical technical inspection.</li>
         </ol>
-        <p class="note">This was practical bring-up, not a formal automated test framework. We didn’t capture waveforms or keep a detailed test log.</p>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-photos">
       <div class="wrap">
-        <h2 id="s-photos" class="sr-only">Vehicle photos</h2>
+        <h2 id="s-photos" class="sr-only">Photos from the car</h2>
         <div class="grid-2">
           <figure>
             <div class="frame cover" style="aspect-ratio:3/4">
               <img src="../assets/img/vehicle-nucleo-board.jpg" width="1050" height="1400" loading="lazy" alt="An STM32 Nucleo development board mounted on a purple vehicle electronics board with relays.">
             </div>
-            <figcaption><span class="evidence">Photo</span>Prior-generation vehicle electronics used on the 2026 car. This is not my rear-control PCB.</figcaption>
+            <figcaption>Electronics from the previous-generation system we used on the 2026 car (not my board).</figcaption>
           </figure>
           <figure>
             <div class="frame cover" style="aspect-ratio:3/4">
               <img src="../assets/img/vehicle-indianapolis.jpg" width="900" height="1600" loading="lazy" alt="Team members loading the Supermileage vehicle onto a ramp outside the garages at Indianapolis Motor Speedway.">
             </div>
-            <figcaption><span class="evidence">Photo</span>The Supermileage vehicle at Indianapolis Motor Speedway, 2026.</figcaption>
+            <figcaption>The car at Indianapolis Motor Speedway, 2026.</figcaption>
           </figure>
         </div>
       </div>
@@ -121,31 +118,29 @@
 
     <section class="cs-section" aria-labelledby="s-decisions">
       <div class="narrow">
-        <span class="kicker">Key engineering decision</span>
-        <h2 id="s-decisions">Choosing a brake-light sensor.</h2>
+        <h2 id="s-decisions">Choosing a brake-light sensor</h2>
         <div class="prose">
-          <p>I evaluated three ways to detect braking: a Hall-effect sensor, a hydraulic-pressure sensor, and a strain gauge.</p>
-          <p>Mechanical constraints on the vehicle affected the other two options, so we deployed a strain gauge on the pedal assembly. It was the practical choice for this car rather than the theoretically best sensor.</p>
+          <p>I compared three ways to tell when the brake is pressed: a Hall-effect sensor, a hydraulic pressure sensor, and a strain gauge.</p>
+          <p>The first two didn’t fit well with the car’s mechanical setup, so we went with a strain gauge on the brake pedal.</p>
         </div>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-status">
       <div class="wrap">
-        <span class="kicker">Where it ended</span>
-        <h2 id="s-status">State at the end of the season.</h2>
+        <h2 id="s-status">Where it ended</h2>
         <div class="status-cols">
           <div class="status-col">
-            <h3>Done in hardware</h3>
+            <h3>Done on the car</h3>
             <ul>
-              <li>CAN fault isolated and repaired on the prior system</li>
-              <li>Strain-gauge brake sensing deployed</li>
+              <li>CAN fixed on the existing system</li>
+              <li>Strain-gauge brake sensing installed</li>
             </ul>
           </div>
           <div class="status-col">
             <h3>Designed only</h3>
             <ul>
-              <li>Rear-control schematic and two-layer layout; the board was not fabricated</li>
+              <li>The rear-control schematic and layout; the board wasn’t fabricated</li>
             </ul>
           </div>
         </div>
@@ -154,15 +149,14 @@
 
     <section class="cs-section" aria-labelledby="s-skills">
       <div class="narrow">
-        <span class="kicker">Skills demonstrated</span>
-        <h2 id="s-skills" class="sr-only">Skills</h2>
+        <h2 id="s-skills">Skills</h2>
         <ul class="tags">
           <li>Schematic and PCB layout</li>
           <li>KiCad</li>
-          <li>CAN bus debugging</li>
-          <li>Harness fabrication</li>
+          <li>CAN debugging</li>
+          <li>Wiring harnesses</li>
           <li>Sensor selection</li>
-          <li>System bring-up</li>
+          <li>Board bring-up</li>
         </ul>
       </div>
     </section>
@@ -170,7 +164,7 @@
     <nav class="cs-next" aria-label="More projects">
       <div class="wrap cs-next-inner">
         <a href="micromouse.html"><small>‹ Previous project</small><strong>Micromouse robot</strong></a>
-        <a class="right" href="converter.html"><small>Back to first project ›</small><strong>48 V to 12 V isolated converter</strong></a>
+        <a class="right" href="converter.html"><small>Next project ›</small><strong>48 V to 12 V isolated converter</strong></a>
       </div>
     </nav>
   </main>

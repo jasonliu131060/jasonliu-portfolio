@@ -31,7 +31,7 @@
         <h1 id="name">Jason Liu</h1>
         <p class="school">UCLA Samueli School of Engineering<span>B.S. Electrical Engineering · expected June 2029</span></p>
         <p class="lede">Electrical engineering student building power, embedded, and control systems.</p>
-        <p class="hero-intro">I build embedded electrical systems where sensing, power, control, and computation have to work together under real constraints: noise, timing, efficiency, safety, and limited energy.</p>
+        <p class="hero-intro">I like working on hardware that combines power electronics, embedded firmware, and control. Right now I’m designing an isolated DC-DC converter for Bruin Racing’s Supermileage car.</p>
         <div class="links">
           <a class="button" href="assets/Jason_Liu_Resume_2026.pdf">Download resume</a>
           <a class="more" href="mailto:jasonliu131060@outlook.com">Email</a>
@@ -53,25 +53,24 @@
     <section class="work" id="work" aria-labelledby="work-title">
       <div class="wrap">
         <div class="work-head">
-          <h2 class="section-title" id="work-title">Selected work.</h2>
+          <h2 class="section-title" id="work-title">Projects</h2>
         </div>
 
         <div class="group">
           <h3 class="group-title">Current project</h3>
-          <p class="group-note">What I’m working on now.</p>
 
           <article class="feature" aria-labelledby="p1">
             <div class="feature-text">
               <p class="state now">In progress <span>· Jun 2026 – present</span></p>
-              <h3 id="p1">48 V to 12 V isolated power converter.</h3>
-              <p class="summary">A 120 W active-clamp forward converter for a hydrogen fuel-cell vehicle, covering magnetics, synchronous rectification, sensing, protection, and digital control. I’m also testing a two-switch forward version so the switch nodes stay under the Shell Eco-marathon’s 60 V limit.</p>
+              <h3 id="p1">48 V to 12 V isolated power converter</h3>
+              <p class="summary">A 120 W isolated converter for our hydrogen fuel-cell Supermileage car. I’m designing the power stage, transformer, sensing, and protection, and testing a two-switch version that stays under the competition’s 60 V limit.</p>
               <p class="role"><span>Role</span> Powertrain project engineer · Bruin Racing Supermileage</p>
               <dl class="metrics">
                 <div><dt>120 W</dt><dd>12 V · 10 A target at 200 kHz</dd></div>
                 <div><dt>&lt; 0.8%</dt><dd>output ripple across 8 load points in LTspice</dd></div>
-                <div><dt>60 V</dt><dd>Shell limit the two-switch version targets</dd></div>
+                <div><dt>60 V</dt><dd>competition limit the two-switch version is designed for</dd></div>
               </dl>
-              <a class="more" href="projects/converter.html">Read the case study</a>
+              <a class="more" href="projects/converter.html">Read more</a>
             </div>
             <figure class="frame white pad natural">
               <img src="assets/diagrams/converter-waveforms-10a.svg" width="1000" height="802" alt="Simulated waveforms at 10 A over three switching periods: main-switch drain voltage, primary current, output-choke current, and output voltage.">
@@ -80,21 +79,20 @@
         </div>
 
         <div class="group">
-          <h3 class="group-title">Completed projects</h3>
-          <p class="group-note">Finished work from research, the Supermileage team, and IEEE.</p>
+          <h3 class="group-title">Past projects</h3>
 
           <article class="feature flip" aria-labelledby="p2">
             <div class="feature-text">
               <p class="state">Completed <span>· Jun – Aug 2026</span></p>
-              <h3 id="p2">Dual-camera edge-AI wearable.</h3>
-              <p class="summary">A low-power camera detects meaningful targets on-device. Only then does a second, high-resolution camera capture a crop and send it over BLE for a vision-language model to describe.</p>
+              <h3 id="p2">Dual-camera edge-AI wearable</h3>
+              <p class="summary">A wearable camera that runs detection on a low-power AI chip. When it spots a poster or screen, it takes a high-resolution photo and sends the crop over Bluetooth so a vision-language model can summarize it.</p>
               <p class="role"><span>Role</span> Undergraduate researcher · UCLA Integrated Sensors Laboratory</p>
               <dl class="metrics">
                 <div><dt>0.833</dt><dd>average mAP<sub>50</sub>, four target classes</dd></div>
-                <div><dt>1.7 MB</dt><dd>INT8 YOLOv5n, sized for the Himax WE2</dd></div>
+                <div><dt>1.7 MB</dt><dd>INT8 YOLOv5n model on the Himax WE2</dd></div>
                 <div><dt>0.37 J</dt><dd>per image over BLE, vs 2.41 J over Wi-Fi</dd></div>
               </dl>
-              <a class="more" href="projects/wearable.html">Read the case study</a>
+              <a class="more" href="projects/wearable.html">Read more</a>
             </div>
             <figure class="frame white natural">
               <img src="assets/img/wearable-prototype-labeled.jpg" width="2000" height="793" alt="Wearable prototype, front and open back, labeled: high-resolution camera, low-resolution camera, Bluetooth Low Energy SoC, and low-power AI processor.">
@@ -107,15 +105,15 @@
                 <img src="assets/img/micromouse-final.jpg" width="2000" height="1500" loading="lazy" alt="Assembled Micromouse robot: red custom PCB with IR emitters at the front, wheels, and a battery on a printed bracket.">
               </figure>
               <p class="state">Completed <span>· Sep 2025 – May 2026</span></p>
-              <h3 id="p3">Micromouse robot.</h3>
-              <p class="summary">A compact robot built around a custom two-layer STM32F205 board with motor drive, encoder feedback, and four-direction IR sensing.</p>
+              <h3 id="p3">Micromouse robot</h3>
+              <p class="summary">A small robot built on a custom two-layer STM32 board with motor drivers, wheel encoders, and IR wall sensors.</p>
               <p class="role"><span>Role</span> PCB and firmware · UCLA IEEE Micromouse, team of three</p>
               <dl class="metrics">
                 <div><dt>1 kHz</dt><dd>closed-loop PD update</dd></div>
                 <div><dt>128</dt><dd>DMA samples per IR reading</dd></div>
                 <div><dt>2-layer</dt><dd>custom STM32 PCB</dd></div>
               </dl>
-              <a class="more" href="projects/micromouse.html">Read the case study</a>
+              <a class="more" href="projects/micromouse.html">Read more</a>
             </article>
 
             <article class="card" aria-labelledby="p4">
@@ -123,15 +121,15 @@
                 <img src="assets/img/rear-control-pcb.png" width="1328" height="982" loading="lazy" alt="KiCad layout of the two-layer rear-control PCB with power, lighting, sensing, and CAN sections.">
               </figure>
               <p class="state">Completed <span>· Sep 2025 – Jun 2026</span></p>
-              <h3 id="p4">Supermileage rear-control board.</h3>
-              <p class="summary">Design of a board for rear lighting, sensing, and CAN, plus hands-on harness and CAN debugging on the prior-generation vehicle at the 2026 Shell Eco-marathon.</p>
+              <h3 id="p4">Supermileage rear-control board</h3>
+              <p class="summary">A rear lighting, sensing, and CAN board for the Supermileage car, plus fixing the car’s CAN wiring at the 2026 Shell Eco-marathon.</p>
               <p class="role"><span>Role</span> Low-voltage subteam · Bruin Racing Supermileage</p>
               <dl class="metrics">
                 <div><dt>2-layer</dt><dd>schematic to layout in KiCad</dd></div>
-                <div><dt>CAN</dt><dd>fault isolated on-site</dd></div>
-                <div><dt>3</dt><dd>brake-sensing approaches evaluated</dd></div>
+                <div><dt>CAN</dt><dd>fixed on-site at competition</dd></div>
+                <div><dt>3</dt><dd>brake sensors compared</dd></div>
               </dl>
-              <a class="more" href="projects/rear-control.html">Read the case study</a>
+              <a class="more" href="projects/rear-control.html">Read more</a>
             </article>
           </div>
         </div>
@@ -141,9 +139,9 @@
     <section class="about" id="about" aria-labelledby="about-title">
       <div class="wrap">
         <div class="about-copy">
-          <h2 class="section-title" id="about-title">About.</h2>
-          <p class="lede">I’m most interested in where continuous-time hardware meets digital control.</p>
-          <p class="body">I’m an electrical engineering student at the UCLA Samueli School of Engineering. I enjoy systems that combine analog sensing, power conversion, embedded firmware, and feedback, especially when the design has to survive noise, timing limits, efficiency targets, and safety requirements. My work so far includes an isolated vehicle power converter, a dual-camera edge-AI wearable, vehicle control electronics, and an autonomous robot.</p>
+          <h2 class="section-title" id="about-title">About</h2>
+          <p class="lede">I’m interested in where analog hardware meets digital control.</p>
+          <p class="body">I’m an electrical engineering student at the UCLA Samueli School of Engineering. Most of my projects mix analog circuits, power conversion, embedded firmware, and feedback control. So far that has included an isolated power converter, a dual-camera wearable, vehicle electronics, and a Micromouse robot.</p>
           <dl class="facts">
             <div><dt>Education</dt><dd>B.S. Electrical Engineering, UCLA Samueli School of Engineering · expected June 2029</dd></div>
             <div><dt>Hardware</dt><dd>PCB design and bring-up, soldering, oscilloscope debugging, LTspice</dd></div>
@@ -156,8 +154,8 @@
 
     <section class="contact" id="contact" aria-labelledby="contact-title">
       <div class="wrap">
-        <h2 class="section-title" id="contact-title">Let’s talk.</h2>
-        <p class="lede">I’m looking for hardware engineering internships in power, embedded, and control systems.</p>
+        <h2 class="section-title" id="contact-title">Contact</h2>
+        <p class="lede">I’m looking for hardware engineering internships. Email is the best way to reach me.</p>
         <div class="links">
           <a class="button" href="mailto:jasonliu131060@outlook.com">jasonliu131060@outlook.com</a>
           <a class="more" href="https://www.linkedin.com/in/jingxuan-liu-0289502a7/" rel="noopener">LinkedIn</a>
