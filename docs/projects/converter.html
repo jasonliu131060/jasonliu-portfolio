@@ -35,9 +35,9 @@
         <div><dt>Team</dt><dd>Bruin Racing · Supermileage Vehicle</dd></div>
         <div><dt>Timeline</dt><dd>Jun 2026 – present</dd></div>
         <div><dt>Role</dt><dd>Powertrain project engineer</dd></div>
-        <div><dt>Tools</dt><dd>LTspice · STM32G474</dd></div>
+        <div><dt>Tools</dt><dd>LTspice · Altium Designer · STM32G474</dd></div>
       </dl>
-      <p class="outcome">This is my current project. Everything here is still in simulation, and the hardware build hasn’t started yet. Right now I’m comparing the active-clamp design with a two-switch forward version that keeps the switch voltage under the 60 V limit in the Shell Eco-marathon rules.</p>
+      <p class="outcome">This is my current project. I’ve simulated the design in LTspice and I’m now drawing the schematic in Altium. No hardware has been built yet. I’m also comparing the active-clamp design with a two-switch forward version that keeps the switch voltage under the 60 V limit in the Shell Eco-marathon rules.</p>
     </header>
 
     <figure class="wrap cs-hero">
@@ -65,14 +65,69 @@
           <li>Modeled the PQ32/30 N97 transformer (6:4 turns, 180 µH magnetizing inductance) and swept leakage inductance and dead time (45–420 ns) to see how they affect switching and MOSFET voltage stress.</li>
           <li>Designed the protection sensing circuits for an STM32G474: Kelvin-sensed current shunts, buffered voltage dividers, and NTC thermistors, read by the chip’s ADC and comparators.</li>
           <li>Started simulating a two-switch forward converter as an alternative that stays under 60 V.</li>
+          <li>Drew the schematic in Altium Designer across three sheets: the power stage, the gate drive and sync circuit, and the supplies.</li>
         </ul>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-schematic">
+      <div class="wrap">
+        <h2 id="s-schematic">Schematic</h2>
+        <div class="prose narrow" style="margin-left:0">
+          <p>This is the current version of the design, drawn in Altium. It’s the active-clamp version, split across three sheets. Click any sheet to open it full size.</p>
+        </div>
+
+        <h3 class="sub">Power stage</h3>
+        <div class="prose narrow" style="margin-left:0">
+          <p>The transformer has a 6:4 turns ratio. The 6-turn primary is split into a 4-turn inner winding and a 2-turn outer winding, with the 4-turn secondary sandwiched between them. Interleaving the windings like this keeps the primary and secondary tightly coupled, which cuts down on leakage inductance.</p>
+          <p>All four MOSFETs (the main and clamp switches on the primary, and the forward and catch rectifiers on the secondary) have an RC snubber across them, 10 Ω in series with 220 pF. The snubbers are only there to absorb the voltage spikes and ringing from switching, not to clamp the voltage. The switches are driven by the gate drivers on the drive and sync sheet. A 10 mΩ shunt under the main switch measures primary current, and a 3 mΩ shunt after the 15 µH output choke measures output current.</p>
+        </div>
+        <figure class="figure-block">
+          <a class="frame white" href="../assets/img/converter-schematic-power-stage.png">
+            <img src="../assets/img/converter-schematic-power-stage.png" width="1245" height="822" loading="lazy" alt="Altium power-stage schematic: input capacitors, the main and clamp MOSFETs with RC snubbers, a primary current shunt, the T1 transformer with a split primary and one secondary, the forward and catch synchronous rectifier MOSFETs with RC snubbers, the 15 µH output choke, a 3 mΩ output shunt, and output capacitors.">
+          </a>
+          <figcaption>Power stage sheet.</figcaption>
+        </figure>
+
+        <h3 class="sub">Gate drive and sync</h3>
+        <div class="prose narrow" style="margin-left:0">
+          <p>On the primary side, a UCC27735 half-bridge driver runs the main switch and the high-side clamp switch from the STM32’s PWM signals. Each gate has its own resistor and diode network, so turn-on and turn-off speeds can be set separately.</p>
+          <p>The synchronous rectifiers are on the secondary side, which has a separate ground from the primary. To pass the switching timing across that isolation, a UCC27524 gate driver takes the sync signal from the STM32 and acts as a 5 V buffer, giving a clean, strong pulse to drive a small sync transformer. On the secondary side, an LTC3900 synchronous rectifier controller detects the rising and falling edges of that pulse and switches the forward and catch MOSFETs to match.</p>
+        </div>
+        <figure class="figure-block">
+          <a class="frame white" href="../assets/img/converter-schematic-drive-and-sync.png">
+            <img src="../assets/img/converter-schematic-drive-and-sync.png" width="1245" height="822" loading="lazy" alt="Altium drive and sync schematic: a UCC27735 primary-side half-bridge gate driver with bootstrap diode, resistor and diode gate networks for each MOSFET, a UCC27524 5 V buffer driving a small sync transformer through a 220 pF capacitor, and an LTC3900 synchronous rectifier controller on the secondary side.">
+          </a>
+          <figcaption>Gate drive and sync sheet.</figcaption>
+        </figure>
+
+        <h3 class="sub">Supplies</h3>
+        <div class="prose narrow" style="margin-left:0">
+          <p>Each side of the isolation barrier needs its own low-voltage rails for the gate drivers, controller, and sensing amplifiers. On the primary side, a TPS62163 buck steps 12 V down to 5 V, and the 12 V rail also powers the primary gate driver. On the secondary side, two TPS7A25 LDOs take the converter’s 12 V output down to 10 V for the SR controller, and then down to 3.3 V.</p>
+        </div>
+        <figure class="figure-block">
+          <a class="frame white" href="../assets/img/converter-schematic-supplies.png">
+            <img src="../assets/img/converter-schematic-supplies.png" width="1245" height="822" loading="lazy" alt="Altium supplies schematic: a TPS62163 12 V to 5 V buck on the primary side, a TPS7A25 LDO from the converter output to 10 V on the secondary side, and a second TPS7A25 LDO from 10 V to 3.3 V.">
+          </a>
+          <figcaption>Supplies sheet.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="cs-section" aria-labelledby="s-startup">
+      <div class="narrow">
+        <h2 id="s-startup">Powering the primary side</h2>
+        <div class="prose">
+          <p>This is the main problem I’m working on right now. The primary side needs its own low-voltage power, and I want to get it directly from the 48 V input instead of adding a separate auxiliary supply.</p>
+          <p>My plan is to add an auxiliary winding to the transformer. Once the converter is switching, that winding can power the primary-side rails. The catch is that it only produces power after switching starts, and switching can’t start until the controller has power. So I also need a small startup supply that runs off the 48 V input just long enough to get the converter going, and then the auxiliary winding takes over.</p>
+        </div>
       </div>
     </section>
 
     <section class="cs-section" aria-labelledby="s-blocks">
       <div class="wrap">
-        <h2 id="s-blocks">Block diagrams</h2>
-        <p class="note">I made these block diagrams for an earlier design review. I’ve since changed components and I’m working on a new version, so some parts and values in them are out of date.</p>
+        <h2 id="s-blocks">Earlier block diagrams</h2>
+        <p class="note">I made these block diagrams for an earlier design review. I’ve since changed components, so some parts and values in them are out of date. The Altium schematic above is the current version.</p>
         <figure class="figure-block">
           <div class="frame white pad">
             <img src="../assets/img/converter-block-top-level.jpg" width="1390" height="775" loading="lazy" alt="Top-level block diagram: the power stage sends protected input, converter voltage and current, primary and battery current, valley detection, and two temperature signals to the control stage, which returns four PWM signals and connects to CAN.">
@@ -175,15 +230,16 @@
           <div class="status-col">
             <h3 class="now">Working on now</h3>
             <ul>
+              <li>The Altium schematic</li>
+              <li>A startup supply and auxiliary winding for the primary side</li>
               <li>Two-switch forward simulations</li>
-              <li>A new design with updated components</li>
               <li>Battery charging voltage and connection</li>
             </ul>
           </div>
           <div class="status-col">
             <h3>Next</h3>
             <ul>
-              <li>Pick a topology and lay out the PCB</li>
+              <li>Finish the schematic and lay out the PCB</li>
               <li>Wind the transformer and measure its leakage</li>
               <li>Bring up protection, then test at low voltage before full power</li>
             </ul>
@@ -201,7 +257,7 @@
           <li>LTspice</li>
           <li>Mixed-signal sensing</li>
           <li>Protection circuits</li>
-          <li>STM32</li>
+          <li>Altium Designer</li>
         </ul>
       </div>
     </section>
