@@ -37,7 +37,7 @@
         <div><dt>Role</dt><dd>Powertrain project engineer</dd></div>
         <div><dt>Tools</dt><dd>LTspice · Altium Designer · STM32G474</dd></div>
       </dl>
-      <p class="outcome">This is my current project. I’ve simulated the design in LTspice and I’m now drawing the schematic in Altium. No hardware has been built yet. I’m also comparing the active-clamp design with a two-switch forward version that keeps the switch voltage under the 60 V limit in the Shell Eco-marathon rules.</p>
+      <p class="outcome">This is my current project. I’ve simulated the design in LTspice and I’m now drawing the schematic in Altium. No hardware has been built yet.</p>
     </header>
 
     <figure class="wrap cs-hero">
@@ -52,7 +52,7 @@
         <h2 id="s-problem">Background</h2>
         <div class="prose">
           <p>The car runs on a 48 V bus, and its low-voltage electronics need a separate, isolated 12 V supply. The same converter will also charge the 12 V battery. My target is 12 V at 10 A (120 W), switching at 200 kHz.</p>
-          <p>The design has to meet the Shell Eco-marathon’s 60 V maximum-voltage rule, and that rule ended up shaping a lot of my decisions.</p>
+          <p>I chose an active-clamp forward topology with synchronous rectification. Besides the power stage itself, the converter needs gate drive across the isolation barrier, its own sensing and protection, and low-voltage supplies on both sides.</p>
         </div>
       </div>
     </section>
@@ -64,7 +64,6 @@
           <li>Designed the active-clamp power stage and simulated it in LTspice using Infineon’s OptiMOS6 150 V MOSFET models.</li>
           <li>Modeled the PQ32/30 N97 transformer (6:4 turns, 180 µH magnetizing inductance) and swept leakage inductance and dead time (45–420 ns) to see how they affect switching and MOSFET voltage stress.</li>
           <li>Designed the protection sensing circuits for an STM32G474: Kelvin-sensed current shunts, buffered voltage dividers, and NTC thermistors, read by the chip’s ADC and comparators.</li>
-          <li>Started simulating a two-switch forward converter as an alternative that stays under 60 V.</li>
           <li>Drew the schematic in Altium Designer across three sheets: the power stage, the gate drive and sync circuit, and the supplies.</li>
         </ul>
       </div>
@@ -118,8 +117,8 @@
       <div class="narrow">
         <h2 id="s-startup">Powering the primary side</h2>
         <div class="prose">
-          <p>This is the main problem I’m working on right now. The primary side needs its own low-voltage power, and I want to get it directly from the 48 V input instead of adding a separate auxiliary supply.</p>
-          <p>My plan is to add an auxiliary winding to the transformer. Once the converter is switching, that winding can power the primary-side rails. The catch is that it only produces power after switching starts, and switching can’t start until the controller has power. So I also need a small startup supply that runs off the 48 V input just long enough to get the converter going, and then the auxiliary winding takes over.</p>
+          <p>This is the main problem I’m working on right now. The primary side needs its own 12 V rail. It powers the primary gate driver directly and feeds the 12 V-to-5 V buck. I want to get it from the 48 V input instead of adding a separate auxiliary supply.</p>
+          <p>My plan is to add an auxiliary winding to the transformer. Once the converter is switching, that winding can supply the 12 V rail. The catch is that it only produces power after switching starts, and switching can’t start until the controller has power. So I also need a small startup supply that runs off the 48 V input just long enough to get the converter going, and then the auxiliary winding takes over.</p>
         </div>
       </div>
     </section>
@@ -154,16 +153,16 @@
         <h2 id="s-decisions">Design decisions</h2>
         <div class="decisions">
           <div class="decision">
-            <h3>Trying a two-switch forward for the 60 V rule</h3>
-            <p>In my active-clamp simulations, the main switch goes above 80 V while the transformer resets, which is over the 60 V limit. In a two-switch forward, diodes clamp both switch nodes to the 48 V input, so I’m testing it as the alternative.</p>
-          </div>
-          <div class="decision">
             <h3>Turning off the catch rectifier at light load</h3>
             <p>At light load the output inductor runs in discontinuous mode. Keeping the catch MOSFET switched on in that mode made its voltage spikes worse, so I turn its gate drive off in DCM. At 1.5 A, that brought the simulated peak down from 74.4 V to 52.8 V.</p>
           </div>
           <div class="decision">
             <h3>Fault shutdown in hardware</h3>
             <p>Regulation runs in firmware on the STM32G474, but fault shutdown goes through the chip’s built-in comparators. That way the converter can shut off without waiting on the control loop.</p>
+          </div>
+          <div class="decision">
+            <h3>Interleaving the transformer windings</h3>
+            <p>I split the 6-turn primary into a 2-turn outer winding and a 4-turn inner winding, with the secondary between them. Keeping the windings close together like this reduces leakage inductance, which means less ringing and lower voltage spikes on the switches.</p>
           </div>
           <div class="decision">
             <h3>Planning for transformer tolerance</h3>
@@ -192,25 +191,9 @@
         <h2 id="s-waves">Full-load waveforms</h2>
         <figure class="figure-block">
           <div class="frame white pad">
-            <img src="../assets/diagrams/converter-waveforms-10a.svg" width="1000" height="802" loading="lazy" alt="Four stacked plots over three 5 µs switching periods at 10 A: main-switch drain voltage switching between 0 and about 82 V, above a dashed 60 V line; primary current up to about 8 A with ringing; output-choke current ramping between about 8.7 and 11.2 A; and output voltage near 12.35 V varying by under 20 mV.">
+            <img src="../assets/diagrams/converter-waveforms-10a.svg" width="1000" height="802" loading="lazy" alt="Four stacked plots over three 5 µs switching periods at 10 A: main-switch drain voltage switching between 0 and about 82 V; primary current up to about 8 A with ringing; output-choke current ramping between about 8.7 and 11.2 A; and output voltage near 12.35 V varying by under 20 mV.">
           </div>
-          <figcaption>LTspice simulation of the active-clamp design at 48 V in and 10 A out (open loop, 25 °C). The dashed line is the 60 V limit. The main switch goes well above it, which is why I’m also looking at the two-switch forward.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section class="cs-section" aria-labelledby="s-tsf">
-      <div class="wrap">
-        <h2 id="s-tsf">Two-switch forward converter</h2>
-        <div class="prose narrow" style="margin-left:0">
-          <p>In a two-switch forward, the transformer sits between a high-side and a low-side MOSFET. When both turn off, two diodes send the transformer’s stored energy back to the input. That holds the switch voltage at about 48 V instead of letting it rise above it.</p>
-          <p>The downside is that the duty cycle has to stay under 50% so the transformer can reset each cycle. I’m still running simulations before deciding which topology to build.</p>
-        </div>
-        <figure class="figure-block">
-          <div class="frame white">
-            <img src="../assets/img/two-switch-ltspice.png" width="2200" height="931" loading="lazy" alt="LTspice window. Left: waveforms of the output voltage near 12 V, the two primary switch-node voltages switching between about 0 and 48 V, and load current near 10 A. Right: schematic of a two-switch forward with two MOSFETs, two clamp diodes, a coupled transformer, rectifier diodes, and an LC output filter.">
-          </div>
-          <figcaption>An early LTspice run of the two-switch version at 48 V in and about 10 A out. Both switch nodes, V(l_h) and V(l_l), stay at about 48 V, and the output sits near 12 V.</figcaption>
+          <figcaption>LTspice simulation of the active-clamp design at 48 V in and 10 A out (open loop, 25 °C), over three switching periods.</figcaption>
         </figure>
       </div>
     </section>
@@ -231,8 +214,7 @@
             <h3 class="now">Working on now</h3>
             <ul>
               <li>The Altium schematic</li>
-              <li>A startup supply and auxiliary winding for the primary side</li>
-              <li>Two-switch forward simulations</li>
+              <li>A startup supply and auxiliary winding for the primary 12 V rail</li>
               <li>Battery charging voltage and connection</li>
             </ul>
           </div>
